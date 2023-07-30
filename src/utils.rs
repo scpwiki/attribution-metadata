@@ -28,8 +28,8 @@ pub async fn connect_dynamo_db() -> DynamoClient {
 // ServiceResult output helpers
 
 pub fn success() -> Result<String, Error> {
-    debug!("Returning empty success response");
-    let body = ServiceResult::success(()).to_json()?;
+    debug!("Returning generic success response");
+    let body = ServiceResult::success("success").to_json()?;
     Ok(body)
 }
 
