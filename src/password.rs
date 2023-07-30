@@ -35,6 +35,7 @@ impl PasswordType {
 
 #[derive(Deserialize, Debug)]
 pub struct CheckPasswordInput {
+    #[serde(rename = "site")]
     pub site_slug: String,
 
     #[serde(rename = "type")]
@@ -44,6 +45,7 @@ pub struct CheckPasswordInput {
 
 #[derive(Deserialize, Debug)]
 pub struct ChangePasswordInput {
+    #[serde(rename = "site")]
     pub site_slug: String,
 
     #[serde(rename = "type")]
