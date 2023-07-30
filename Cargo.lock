@@ -59,7 +59,6 @@ dependencies = [
  "http",
  "lambda_http",
  "lambda_runtime",
- "log",
  "serde",
  "serde_json",
  "str-macro",

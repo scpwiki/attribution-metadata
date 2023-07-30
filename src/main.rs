@@ -12,13 +12,13 @@
  */
 
 #[macro_use]
-extern crate log;
-
-#[macro_use]
 extern crate serde;
 
 #[macro_use]
 extern crate str_macro;
+
+#[macro_use]
+extern crate tracing;
 
 #[macro_use]
 mod macros;
@@ -36,6 +36,7 @@ mod build {
 use self::handlers::*;
 use http::method::Method;
 use lambda_http::{run, service_fn, Body, Error, Request, RequestExt, Response};
+use tracing::Level;
 
 /// Main handler for Lambda requests.
 ///
@@ -44,6 +45,7 @@ async fn function_handler(req: Request) -> Result<Response<Body>, Error> {
     // Perform routing based on request
     let path = req.uri().path();
     let method = req.method();
+    event!(Level::INFO, method = method.as_str(), path);
 
     let (status, body) = match (path, method) {
         ("/attribution/page", &Method::GET) => handle_get_page_attribution(req).await?,
@@ -55,8 +57,8 @@ async fn function_handler(req: Request) -> Result<Response<Body>, Error> {
         ("/ping", _) => handle_ping()?,
         _ => handle_missing_route(path)?,
     };
+    event!(Level::INFO, status, body);
 
-    // Package up and send JSON response
     let response = Response::builder()
         .status(status)
         .header("Content-Type", "text/json")
@@ -80,6 +82,6 @@ async fn main() -> Result<(), Error> {
         .without_time() // disabling time, because CloudWatch adds the ingestion time
         .init();
 
-    info!("Starting AttributionMetadataService lambda worker");
+    event!(Level::INFO, "Starting AttributionMetadataService lambda worker");
     run(service_fn(function_handler)).await
 }

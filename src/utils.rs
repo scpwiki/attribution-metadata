@@ -18,6 +18,7 @@ use lambda_http::{Body, Error, Request, RequestExt, Response};
 use serde::Deserialize;
 use std::error::Error as StdError;
 use std::fmt::Display;
+use tracing::Level;
 
 pub async fn connect_dynamo_db() -> DynamoClient {
     let config = aws_config::load_from_env().await;
@@ -27,13 +28,14 @@ pub async fn connect_dynamo_db() -> DynamoClient {
 // ServiceResult output helpers
 
 pub fn success() -> Result<String, Error> {
-    info!("Returning empty success response");
+    event!(Level::DEBUG, "Returning empty success response");
     let body = ServiceResult::success(()).to_json()?;
     Ok(body)
 }
 
 pub fn invalid_password(password_type: PasswordType) -> Result<String, Error> {
-    error!(
+    event!(
+        Level::ERROR,
         "Error, invalid password was used for {}",
         password_type.field_name(),
     );
@@ -51,13 +53,13 @@ pub fn invalid_password(password_type: PasswordType) -> Result<String, Error> {
 }
 
 pub fn input_error(error: &dyn Display) -> Result<String, Error> {
-    error!("Error processing input: {error}");
+    event!(Level::ERROR, "Error processing input: {error}");
     let body = ServiceResult::error("input-invalid", str!(error)).to_json()?;
     Ok(body)
 }
 
 pub fn service_error(error: &dyn StdError) -> Result<String, Error> {
-    error!("General backend error caught: {error}");
+    event!(Level::ERROR, "General backend error caught: {error}");
     let body = ServiceResult::error("backend", str!(error)).to_json()?;
     Ok(body)
 }

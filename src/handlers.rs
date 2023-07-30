@@ -15,6 +15,7 @@ use crate::password::{check_password, ChangePasswordInput, CheckPasswordInput};
 use crate::result::ServiceResult;
 use crate::utils::*;
 use lambda_http::{Body, Error, Request, RequestExt, Response};
+use tracing::Level;
 
 macro_rules! input_error {
     ($message:expr) => {
@@ -23,7 +24,7 @@ macro_rules! input_error {
 }
 
 pub async fn handle_get_page_attribution(req: Request) -> Result<(u16, String), Error> {
-    info!("Received page attribution request");
+    event!(Level::INFO, "Received page attribution request");
 
     // We use URL parameters because this is a GET request.
 
@@ -42,16 +43,19 @@ pub async fn handle_get_page_attribution(req: Request) -> Result<(u16, String), 
         None => input_error!("missing URL parameter 'page'"),
     };
 
+    event!(Level::INFO, site_slug, page_slug);
+
     todo!()
 }
 
 pub async fn handle_set_page_attribution(req: Request) -> Result<(u16, String), Error> {
-    info!("Received page attribution update request");
+    event!(Level::INFO, "Received page attribution update request");
+
     todo!()
 }
 
 pub async fn handle_get_site_attributions(req: Request) -> Result<(u16, String), Error> {
-    info!("Received site attribution list request");
+    event!(Level::INFO, "Received site attribution list request");
 
     // We only need one URL parameter here.
 
@@ -67,13 +71,16 @@ pub async fn handle_get_site_attributions(req: Request) -> Result<(u16, String),
 }
 
 pub async fn handle_password_check(req: Request) -> Result<(u16, String), Error> {
-    info!("Received password check request");
+    event!(Level::INFO, "Received password check request");
+
     let dynamo = connect_dynamo_db().await;
     let CheckPasswordInput {
         site_slug,
         password,
         password_type,
     } = parse_body!(&req);
+
+    event!(Level::INFO, site_slug, password_type = password_type.field_name());
 
     let (status, result) =
         match check_password(&dynamo, site_slug, &password, password_type).await {
@@ -87,7 +94,8 @@ pub async fn handle_password_check(req: Request) -> Result<(u16, String), Error>
 }
 
 pub async fn handle_password_change(req: Request) -> Result<(u16, String), Error> {
-    info!("Received password change request");
+    event!(Level::INFO, "Received password change request");
+
     let dynamo = connect_dynamo_db().await;
     let ChangePasswordInput {
         site_slug,
@@ -101,7 +109,7 @@ pub async fn handle_password_change(req: Request) -> Result<(u16, String), Error
 }
 
 pub fn handle_info() -> Result<(u16, String), Error> {
-    info!("Received info request");
+    event!(Level::INFO, "Received info request");
 
     #[derive(Serialize, Debug)]
     struct BuildInfo {
@@ -143,13 +151,13 @@ pub fn handle_info() -> Result<(u16, String), Error> {
 }
 
 pub fn handle_ping() -> Result<(u16, String), Error> {
-    info!("Received ping request");
+    event!(Level::INFO, "Received ping request");
     let body = ServiceResult::success("pong").to_json()?;
     Ok((200, body))
 }
 
 pub fn handle_missing_route(path: &str) -> Result<(u16, String), Error> {
-    error!("Received invalid request (no such route)");
+    event!(Level::ERROR, "Received invalid request (no such route)");
     let body = ServiceResult::error(
         "invalid-route",
         format!("No handler exists for path '{path}'"),

@@ -13,6 +13,7 @@
 
 use aws_sdk_dynamodb::{types::AttributeValue, Client as DynamoClient};
 use lambda_http::Error;
+use tracing::Level;
 
 const TABLE: &str = "attribution_metadata_password";
 
@@ -62,7 +63,7 @@ pub async fn check_password(
     password_type: PasswordType,
 ) -> Result<bool, Error> {
     let field = password_type.field_name();
-    info!("Checking {field} password for site {site_slug}");
+    event!(Level::INFO, "Checking {field} password for site {site_slug}");
 
     let result = dynamo
         .get_item()
