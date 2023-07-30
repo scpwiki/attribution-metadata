@@ -53,6 +53,7 @@ name = "attribution-metadata"
 version = "0.0.1"
 dependencies = [
  "aws-sdk-dynamodb",
+ "http",
  "lambda_http",
  "lambda_runtime",
  "log",

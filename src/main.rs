@@ -21,31 +21,56 @@ extern crate serde;
 extern crate str_macro;
 
 mod attribution;
+mod error;
 mod password;
 
+use error::ServiceError;
+use http::method::Method;
 use lambda_http::{run, service_fn, Body, Error, Request, RequestExt, Response};
 
-/// This is the main body for the function.
-/// Write your code inside it.
-/// There are some code example in the following URLs:
-/// - https://github.com/awslabs/aws-lambda-rust-runtime/tree/main/examples
-async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
-    // Extract some useful information from the request
-    let who = event
-        .query_string_parameters_ref()
-        .and_then(|params| params.first("name"))
-        .unwrap_or("world");
-    let message = format!("Hello {who}, this is an AWS Lambda HTTP request");
+/*
+* XXX
 
-    // Return something that implements IntoResponse.
-    // It will be serialized to the right response event automatically by the runtime
-    let resp = Response::builder()
-        .status(200)
-        .header("content-type", "text/plain")
-        .body(message.into())
+   // Extract some useful information from the request
+   let who = event
+       .query_string_parameters_ref()
+       .and_then(|params| params.first("name"))
+       .unwrap_or("world");
+   let message = format!("Hello {who}, this is an AWS Lambda HTTP request");
+*/
+
+/// Main handler for Lambda requests.
+///
+/// This dispatches to the appropriate handler function, then returns the response.
+async fn function_handler(req: Request) -> Result<Response<Body>, Error> {
+    // Perform routing based on request
+    let path = req.uri().path();
+    let method = req.method();
+
+    let (status, body) = match (path, method) {
+        ("/attribution/page", &Method::GET) => todo!(), // get_page_attribution
+        ("/attribution/page", &Method::PUT) => todo!(), // set_page_attribution
+        ("/attribution/site", &Method::GET) => todo!(), // get_site_attributions
+        ("/password/check", &Method::POST) => todo!(),
+        ("/password/change", &Method::PUT) => todo!(),
+        _ => {
+            let message = serde_json::to_string(&ServiceError {
+                etype: str!("invalid-route"),
+                message: format!("No handler exists for path {path:?}"),
+            })?;
+
+            (400, message)
+        }
+    };
+
+    // Package up and send JSON response
+    let response = Response::builder()
+        .status(status)
+        .header("Content-Type", "text/json")
+        .body(body.into())
         .map_err(Box::new)?;
 
-    Ok(resp)
+    Ok(response)
 }
 
 #[tokio::main]
