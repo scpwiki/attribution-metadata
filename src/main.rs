@@ -11,6 +11,18 @@
  *
  */
 
+#[macro_use]
+extern crate log;
+
+#[macro_use]
+extern crate serde;
+
+#[macro_use]
+extern crate str_macro;
+
+mod attribution;
+mod password;
+
 use lambda_http::{run, service_fn, Body, Error, Request, RequestExt, Response};
 
 /// This is the main body for the function.
@@ -44,5 +56,6 @@ async fn main() -> Result<(), Error> {
         .without_time() // disabling time, because CloudWatch adds the ingestion time
         .init();
 
+    info!("Starting AttributionMetadataService lambda worker");
     run(service_fn(function_handler)).await
 }

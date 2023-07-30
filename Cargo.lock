@@ -56,6 +56,9 @@ dependencies = [
  "lambda_http",
  "lambda_runtime",
  "log",
+ "serde",
+ "serde_json",
+ "str-macro",
  "tokio",
  "tracing",
  "tracing-subscriber",
@@ -1219,6 +1222,12 @@ name = "spin"
 version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6e63cff320ae2c57904679ba7cb63280a3dc4613885beafb148ee7bf9aa9042d"
+
+[[package]]
+name = "str-macro"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9b7514866270741c7b03dd36e2c68f71cf064b230e8217c81bbd4d619d564864"
 
 [[package]]
 name = "subtle"
