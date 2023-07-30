@@ -59,6 +59,10 @@ async fn function_handler(req: Request) -> Result<Response<Body>, Error> {
     let response = Response::builder()
         .status(status)
         .header("Content-Type", "text/json")
+        .header(
+            "X-AttributionMetadataService-Version",
+            self::build::PKG_VERSION,
+        )
         .body(body.into())
         .map_err(Box::new)?;
 
