@@ -87,3 +87,24 @@ pub async fn check_password(
         }
     }
 }
+
+pub async fn change_password(
+    dynamo: &DynamoClient,
+    site_slug: String,
+    password: String,
+    password_type: PasswordType,
+) -> Result<(), Error> {
+    let field = password_type.field_name();
+    info!("Changing {field} password for site {site_slug}");
+
+    dynamo
+        .update_item()
+        .table_name(TABLE)
+        .key("site_slug", AttributeValue::S(site_slug))
+        .update_expression(format!("SET {field} = :password"))
+        .expression_attribute_values("password", AttributeValue::S(password))
+        .send()
+        .await?;
+
+    Ok(())
+}
