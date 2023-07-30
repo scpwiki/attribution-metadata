@@ -29,6 +29,10 @@ mod password;
 mod result;
 mod utils;
 
+mod build {
+    include!(concat!(env!("OUT_DIR"), "/built.rs"));
+}
+
 use self::handlers::*;
 use http::method::Method;
 use lambda_http::{run, service_fn, Body, Error, Request, RequestExt, Response};
