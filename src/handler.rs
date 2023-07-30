@@ -15,6 +15,17 @@ use super::result::ServiceResult;
 use lambda_http::{Body, Error, Request, RequestExt, Response};
 use serde::Deserialize;
 
+/*
+* XXX
+
+   // Extract some useful information from the request
+   let who = event
+       .query_string_parameters_ref()
+       .and_then(|params| params.first("name"))
+       .unwrap_or("world");
+   let message = format!("Hello {who}, this is an AWS Lambda HTTP request");
+*/
+
 pub async fn handle_password_check(req: Request) -> Result<(u16, String), Error> {
     todo!()
 }

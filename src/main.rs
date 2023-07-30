@@ -29,17 +29,6 @@ use self::handler::*;
 use http::method::Method;
 use lambda_http::{run, service_fn, Body, Error, Request, RequestExt, Response};
 
-/*
-* XXX
-
-   // Extract some useful information from the request
-   let who = event
-       .query_string_parameters_ref()
-       .and_then(|params| params.first("name"))
-       .unwrap_or("world");
-   let message = format!("Hello {who}, this is an AWS Lambda HTTP request");
-*/
-
 /// Main handler for Lambda requests.
 ///
 /// This dispatches to the appropriate handler function, then returns the response.
