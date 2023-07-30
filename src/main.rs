@@ -21,11 +21,12 @@ extern crate serde;
 extern crate str_macro;
 
 mod attribution;
-mod handler;
+mod handlers;
 mod password;
 mod result;
+mod utils;
 
-use self::handler::*;
+use self::handlers::*;
 use http::method::Method;
 use lambda_http::{run, service_fn, Body, Error, Request, RequestExt, Response};
 

@@ -1,5 +1,5 @@
 /*
- * handler.rs
+ * handlers.rs
  *
  * attribution-metadata
  * Copyright (C) 2023-2023 SCP-EN Technical Team
@@ -11,9 +11,10 @@
  *
  */
 
+use super::password::{check_password, ChangePasswordInput, CheckPasswordInput};
 use super::result::ServiceResult;
+use super::utils::*;
 use lambda_http::{Body, Error, Request, RequestExt, Response};
-use serde::Deserialize;
 
 /*
 * XXX
@@ -39,10 +40,34 @@ pub async fn handle_get_site_attributions(req: Request) -> Result<(u16, String),
 }
 
 pub async fn handle_password_check(req: Request) -> Result<(u16, String), Error> {
-    todo!()
+    let dynamo = connect_dynamo_db().await;
+    let CheckPasswordInput {
+        site_slug,
+        password,
+        password_type,
+    } = parse_body(&req)?;
+
+    let (status, result) =
+        match check_password(&dynamo, site_slug, &password, password_type).await {
+            Ok(true) => (200, success()),
+            Ok(false) => (403, invalid_password(password_type)),
+            Err(error) => (500, service_error(error)),
+        };
+
+    let body = result?;
+    Ok((status, body))
 }
 
 pub async fn handle_password_change(req: Request) -> Result<(u16, String), Error> {
+    let dynamo = connect_dynamo_db().await;
+    let ChangePasswordInput {
+        site_slug,
+        password_type,
+        old_password,
+        new_password,
+        admin_password,
+    } = parse_body(&req)?;
+
     todo!()
 }
 
@@ -59,18 +84,4 @@ pub fn handle_missing_route(path: &str) -> Result<(u16, String), Error> {
     .to_json()?;
 
     Ok((400, body))
-}
-
-fn parse_body<'de, T>(body: &'de Body) -> Result<T, Error>
-where
-    T: Deserialize<'de>,
-{
-    let bytes = match body {
-        Body::Empty => &[],
-        Body::Text(string) => string.as_bytes(),
-        Body::Binary(bytes) => bytes.as_slice(),
-    };
-
-    let data = serde_json::from_slice(bytes)?;
-    Ok(data)
 }

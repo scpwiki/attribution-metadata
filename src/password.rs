@@ -33,6 +33,26 @@ impl PasswordType {
     }
 }
 
+#[derive(Deserialize, Debug)]
+pub struct CheckPasswordInput {
+    pub site_slug: String,
+
+    #[serde(rename = "type")]
+    pub password_type: PasswordType,
+    pub password: String,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct ChangePasswordInput {
+    pub site_slug: String,
+
+    #[serde(rename = "type")]
+    pub password_type: PasswordType,
+    pub old_password: String,
+    pub new_password: String,
+    pub admin_password: String,
+}
+
 pub async fn check_password(
     dynamo: &DynamoClient,
     site_slug: String,
