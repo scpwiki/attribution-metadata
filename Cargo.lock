@@ -50,7 +50,7 @@ dependencies = [
 
 [[package]]
 name = "attribution-metadata"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
  "aws-config",
  "aws-sdk-dynamodb",
