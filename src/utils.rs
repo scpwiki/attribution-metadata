@@ -16,8 +16,8 @@ use super::result::ServiceResult;
 use aws_sdk_dynamodb::Client as DynamoClient;
 use lambda_http::{Body, Error, Request, RequestExt, Response};
 use serde::Deserialize;
-use std::fmt::Display;
 use std::error::Error as StdError;
+use std::fmt::Display;
 
 pub async fn connect_dynamo_db() -> DynamoClient {
     let config = aws_config::load_from_env().await;
@@ -33,7 +33,11 @@ pub fn success() -> Result<String, Error> {
 }
 
 pub fn invalid_password(password_type: PasswordType) -> Result<String, Error> {
-    error!("Error, invalid password was used for {}", password_type.field_name());
+    error!(
+        "Error, invalid password was used for {}",
+        password_type.field_name(),
+    );
+
     let body = ServiceResult::error(
         "invalid-password",
         format!(

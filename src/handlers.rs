@@ -16,6 +16,12 @@ use super::result::ServiceResult;
 use super::utils::*;
 use lambda_http::{Body, Error, Request, RequestExt, Response};
 
+macro_rules! input_error {
+    ($message:expr) => {
+        return Ok((400, input_error(&$message)?))
+    };
+}
+
 /*
 * XXX
 
@@ -29,6 +35,24 @@ use lambda_http::{Body, Error, Request, RequestExt, Response};
 
 pub async fn handle_get_page_attribution(req: Request) -> Result<(u16, String), Error> {
     info!("Received page attribution request");
+
+    // We use URL parameters because this is a GET request.
+
+    let params = match req.query_string_parameters_ref() {
+        Some(params) => params,
+        None => input_error!("missing URL parameters 'site' and 'page'"),
+    };
+
+    let site_slug = match params.first("site") {
+        Some(slug) => slug,
+        None => input_error!("missing URL parameter 'site'"),
+    };
+
+    let page_slug = match params.first("page") {
+        Some(slug) => slug,
+        None => input_error!("missing URL parameter 'page'"),
+    };
+
     todo!()
 }
 
@@ -39,6 +63,17 @@ pub async fn handle_set_page_attribution(req: Request) -> Result<(u16, String), 
 
 pub async fn handle_get_site_attributions(req: Request) -> Result<(u16, String), Error> {
     info!("Received site attribution list request");
+
+    // We only need one URL parameter here.
+
+    let site_slug = match req
+        .query_string_parameters_ref()
+        .and_then(|params| params.first("site"))
+    {
+        Some(site_slug) => site_slug,
+        None => input_error!("missing URL parameter 'site'"),
+    };
+
     todo!()
 }
 
