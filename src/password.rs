@@ -60,6 +60,7 @@ pub async fn check_password(
             let actual = items[field]
                 .as_s()
                 .expect("Password field in database not string");
+
             Ok(password == actual)
         }
     }
