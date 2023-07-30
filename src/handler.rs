@@ -11,46 +11,8 @@
  *
  */
 
+use super::result::ServiceResult;
 use lambda_http::{Body, Error, Request, RequestExt, Response};
-use serde::Serialize;
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash)]
-#[serde(rename_all = "snake_case", untagged)]
-pub enum ServiceResult<T> {
-    Success {
-        error: (),
-        data: T,
-    },
-    Error {
-        error: &'static str,
-        message: String,
-    },
-}
-
-impl<T> ServiceResult<T> {
-    pub fn success(data: T) -> Self {
-        ServiceResult::Success { data, error: () }
-    }
-}
-
-impl ServiceResult<()> {
-    pub fn error(error_type: &'static str, message: String) -> Self {
-        ServiceResult::Error {
-            error: error_type,
-            message,
-        }
-    }
-}
-
-impl<T> ServiceResult<T>
-where
-    T: Serialize,
-{
-    pub fn to_json(&self) -> Result<String, Error> {
-        let body = serde_json::to_string(self)?;
-        Ok(body)
-    }
-}
 
 pub async fn handle_password_check(req: Request) -> Result<(u16, String), Error> {
     todo!()

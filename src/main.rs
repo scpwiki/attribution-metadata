@@ -23,6 +23,7 @@ extern crate str_macro;
 mod attribution;
 mod handler;
 mod password;
+mod result;
 
 use self::handler::*;
 use http::method::Method;
