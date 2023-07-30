@@ -11,6 +11,141 @@
  *
  */
 
+use crate::utils::replace_in_place;
+use aws_sdk_dynamodb::{types::AttributeValue, Client as DynamoClient};
+use lambda_http::Error;
+use once_cell::sync::Lazy;
+use regex::Regex;
+use std::convert::TryFrom;
+use std::num::NonZeroU32;
+
 const TABLE: &str = "attribution_metadata";
 
-// TODO
+/// Verifies that a string is a date in ISO-8601 format.
+static DATE_REGEX: Lazy<Regex> =
+    Lazy::new(|| Regex::new(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$").unwrap());
+
+/// Yields whitespace at the beginning or end of a string.
+static WHITESPACE_REGEX: Lazy<Regex> =
+    Lazy::new(|| Regex::new(r"(?:^\s+|\s+$)").unwrap());
+
+#[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialEq, Eq, Hash)]
+#[serde(rename_all = "snake_case")]
+pub enum AttributionType {
+    Author,
+    Rewrite,
+    Translator,
+    Maintainer,
+}
+
+impl AttributionType {
+    pub fn field_name(self) -> &'static str {
+        match self {
+            AttributionType::Author => "author",
+            AttributionType::Rewrite => "rewrite",
+            AttributionType::Translator => "translator",
+            AttributionType::Maintainer => "maintainer",
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct AttributionEntry {
+    #[serde(rename = "type")]
+    pub attribution_type: AttributionType,
+    pub user_name: String,
+    pub user_id: Option<NonZeroU32>,
+    pub date: Option<String>,
+}
+
+impl TryFrom<AttributionEntry> for AttributeValue {
+    type Error = String;
+
+    fn try_from(
+        AttributionEntry {
+            attribution_type,
+            mut user_name,
+            user_id,
+            date,
+        }: AttributionEntry,
+    ) -> Result<AttributeValue, String> {
+        let attribution_type = attribution_type.field_name();
+        debug!(attribution_type, user_name, user_id, date);
+
+        // Trim whitespace off of username
+        //
+        // It can only be a mistake, and instead of
+        // returning an error we can just fix it ourselves.
+        replace_in_place(&mut user_name, &WHITESPACE_REGEX, "");
+
+        // Check that username isn't an empty string
+        if user_name.is_empty() {
+            error!("Passed username was empty");
+            return Err(str!(
+                "Username cannot be an empty string or only whitespace",
+            ));
+        }
+
+        // Check date against pattern
+        if let Some(ref date) = date {
+            if !DATE_REGEX.is_match(date) {
+                error!("Date value was invalid");
+                return Err(format!(
+                    "Date value '{date}' is invalid (must be YYYY-MM-DD)",
+                ));
+            }
+        }
+
+        // Build final map
+        Ok(AttributeValue::M(hashmap! {
+            str!("type") => AttributeValue::S(str!(attribution_type)),
+            str!("user_name") => AttributeValue::S(user_name),
+            str!("user_id") => match user_id {
+                Some(num) => AttributeValue::N(str!(num)),
+                None => AttributeValue::Null(true),
+            },
+            str!("date") => match date {
+                Some(date) => AttributeValue::S(date),
+                None => AttributeValue::Null(true),
+            },
+        }))
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Attribution(pub Vec<AttributionEntry>);
+
+impl TryFrom<Attribution> for AttributeValue {
+    type Error = String;
+
+    fn try_from(attribution: Attribution) -> Result<AttributeValue, String> {
+        info!("Converting attribution entry to DynamoDB object");
+
+        let mut values = Vec::new();
+        for entry in attribution.0 {
+            let value = entry.try_into()?;
+            values.push(value);
+        }
+
+        Ok(AttributeValue::L(values))
+    }
+}
+
+pub async fn get_page_attribution(
+    dynamo: &DynamoClient,
+    site_slug: String,
+    page_slug: String,
+) -> Result<Attribution, Error> {
+    info!("Getting attribution data for site {site_slug}, page {page_slug}");
+
+    let result = dynamo
+        .get_item()
+        .table_name(TABLE)
+        .key("site_slug", AttributeValue::S(site_slug))
+        .key("page_slug", AttributeValue::S(page_slug))
+        .projection_expression("attribution")
+        .send()
+        .await?;
+
+    todo!()
+}

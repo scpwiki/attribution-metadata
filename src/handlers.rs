@@ -25,7 +25,7 @@ macro_rules! input_error {
     };
 }
 
-pub async fn handle_get_page_attribution(req: Request) -> Result<(u16, String), Error> {
+pub async fn handle_get_page(req: Request) -> Result<(u16, String), Error> {
     info!("Received page attribution request");
 
     // We use URL parameters because this is a GET request.
@@ -50,13 +50,13 @@ pub async fn handle_get_page_attribution(req: Request) -> Result<(u16, String), 
     todo!()
 }
 
-pub async fn handle_set_page_attribution(req: Request) -> Result<(u16, String), Error> {
+pub async fn handle_set_page(req: Request) -> Result<(u16, String), Error> {
     info!("Received page attribution update request");
 
     todo!()
 }
 
-pub async fn handle_get_site_attributions(req: Request) -> Result<(u16, String), Error> {
+pub async fn handle_get_site(req: Request) -> Result<(u16, String), Error> {
     info!("Received site attribution list request");
 
     // We only need one URL parameter here.

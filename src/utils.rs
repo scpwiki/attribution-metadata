@@ -15,6 +15,7 @@ use crate::password::PasswordType;
 use crate::result::ServiceResult;
 use aws_sdk_dynamodb::Client as DynamoClient;
 use lambda_http::Error;
+use regex::Regex;
 use std::error::Error as StdError;
 use std::fmt::Display;
 
@@ -61,4 +62,14 @@ pub fn service_error(error: &dyn StdError) -> Result<String, Error> {
     error!("General backend error caught: {error}");
     let body = ServiceResult::error("backend", str!(error)).to_json()?;
     Ok(body)
+}
+
+// Miscellaneous
+
+pub fn replace_in_place(string: &mut String, regex: &Regex, replacement: &str) {
+    while let Some(mtch) = regex.find(string) {
+        let start = mtch.start();
+        let end = mtch.end();
+        string.replace_range(start..end, replacement);
+    }
 }
