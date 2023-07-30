@@ -21,10 +21,10 @@ extern crate serde;
 extern crate str_macro;
 
 mod attribution;
-mod error;
+mod handler;
 mod password;
 
-use error::ServiceError;
+use self::handler::*;
 use http::method::Method;
 use lambda_http::{run, service_fn, Body, Error, Request, RequestExt, Response};
 
@@ -51,16 +51,10 @@ async fn function_handler(req: Request) -> Result<Response<Body>, Error> {
         ("/attribution/page", &Method::GET) => todo!(), // get_page_attribution
         ("/attribution/page", &Method::PUT) => todo!(), // set_page_attribution
         ("/attribution/site", &Method::GET) => todo!(), // get_site_attributions
-        ("/password/check", &Method::POST) => todo!(),
-        ("/password/change", &Method::PUT) => todo!(),
-        _ => {
-            let message = serde_json::to_string(&ServiceError {
-                etype: str!("invalid-route"),
-                message: format!("No handler exists for path {path:?}"),
-            })?;
-
-            (400, message)
-        }
+        ("/password/check", &Method::POST) => handle_password_check(req).await?,
+        ("/password/change", &Method::PUT) => todo!(), // handle_password_change
+        ("/ping", _) => handle_ping()?,
+        _ => handle_missing_route(path)?,
     };
 
     // Package up and send JSON response
