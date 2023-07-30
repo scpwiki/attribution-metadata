@@ -26,7 +26,23 @@ use serde::Deserialize;
    let message = format!("Hello {who}, this is an AWS Lambda HTTP request");
 */
 
+pub async fn handle_get_page_attribution(req: Request) -> Result<(u16, String), Error> {
+    todo!()
+}
+
+pub async fn handle_set_page_attribution(req: Request) -> Result<(u16, String), Error> {
+    todo!()
+}
+
+pub async fn handle_get_site_attributions(req: Request) -> Result<(u16, String), Error> {
+    todo!()
+}
+
 pub async fn handle_password_check(req: Request) -> Result<(u16, String), Error> {
+    todo!()
+}
+
+pub async fn handle_password_change(req: Request) -> Result<(u16, String), Error> {
     todo!()
 }
 

@@ -38,11 +38,11 @@ async fn function_handler(req: Request) -> Result<Response<Body>, Error> {
     let method = req.method();
 
     let (status, body) = match (path, method) {
-        ("/attribution/page", &Method::GET) => todo!(), // get_page_attribution
-        ("/attribution/page", &Method::PUT) => todo!(), // set_page_attribution
-        ("/attribution/site", &Method::GET) => todo!(), // get_site_attributions
+        ("/attribution/page", &Method::GET) => handle_get_page_attribution(req).await?,
+        ("/attribution/page", &Method::PUT) => handle_set_page_attribution(req).await?,
+        ("/attribution/site", &Method::GET) => handle_get_site_attributions(req).await?,
         ("/password/check", &Method::POST) => handle_password_check(req).await?,
-        ("/password/change", &Method::PUT) => todo!(), // handle_password_change
+        ("/password/change", &Method::PUT) => handle_password_change(req).await?,
         ("/ping", _) => handle_ping()?,
         _ => handle_missing_route(path)?,
     };
