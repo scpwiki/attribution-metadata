@@ -81,15 +81,8 @@ pub async fn handle_password_check(req: Request) -> Result<(u16, String), Error>
 
     info!(site_slug, password_type = password_type.field_name());
 
-    let (status, result) =
-        match check_password(&dynamo, site_slug, &password, password_type).await {
-            Ok(true) => (200, success()),
-            Ok(false) => (403, invalid_password(password_type)),
-            Err(error) => (500, service_error(&*error)),
-        };
-
-    let body = result?;
-    Ok((status, body))
+    check_password!(dynamo, site_slug, password, password_type);
+    Ok((200, success()?))
 }
 
 pub async fn handle_password_change(req: Request) -> Result<(u16, String), Error> {

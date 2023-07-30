@@ -20,6 +20,8 @@ use std::error::Error as StdError;
 use std::fmt::Display;
 use tracing::Level;
 
+// Setup
+
 pub async fn connect_dynamo_db() -> DynamoClient {
     let config = aws_config::load_from_env().await;
     DynamoClient::new(&config)

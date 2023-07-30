@@ -12,7 +12,7 @@
  */
 
 macro_rules! parse_body {
-    ($req:expr) => {{
+    ($req:expr $(,)?) => {{
         let bytes = match $req.body() {
             Body::Empty => &[],
             Body::Text(string) => string.as_bytes(),
@@ -27,4 +27,14 @@ macro_rules! parse_body {
             }
         }
     }};
+}
+
+macro_rules! check_password {
+    ($dynamo:expr, $site_slug:expr, $password:expr, $password_type:expr $(,)?) => {
+        match check_password(&$dynamo, $site_slug, &$password, $password_type).await {
+            Ok(true) => (),
+            Ok(false) => return Ok((403, invalid_password($password_type)?)),
+            Err(error) => return Ok((500, service_error(&*error)?)),
+        }
+    };
 }
