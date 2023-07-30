@@ -31,10 +31,16 @@ macro_rules! parse_body {
 
 macro_rules! check_password {
     ($dynamo:expr, $site_slug:expr, $password:expr, $password_type:expr $(,)?) => {
-        match check_password(&$dynamo, $site_slug, &$password, $password_type).await {
+        match check_password(&$dynamo, &$site_slug, &$password, $password_type).await {
             Ok(true) => (),
             Ok(false) => return Ok((403, invalid_password($password_type)?)),
             Err(error) => return Ok((500, service_error(&*error)?)),
         }
+    };
+}
+
+macro_rules! success {
+    () => {
+        Ok((200, success()?))
     };
 }

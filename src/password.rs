@@ -57,7 +57,7 @@ pub struct ChangePasswordInput {
 
 pub async fn check_password(
     dynamo: &DynamoClient,
-    site_slug: String,
+    site_slug: &str,
     password: &str,
     password_type: PasswordType,
 ) -> Result<bool, Error> {
@@ -67,7 +67,7 @@ pub async fn check_password(
     let result = dynamo
         .get_item()
         .table_name(TABLE)
-        .key("site_slug", AttributeValue::S(site_slug))
+        .key("site_slug", AttributeValue::S(str!(site_slug)))
         .projection_expression(field)
         .send()
         .await?;
@@ -88,14 +88,14 @@ pub async fn check_password(
     }
 }
 
-pub async fn change_password(
+pub async fn update_password(
     dynamo: &DynamoClient,
     site_slug: String,
     password: String,
     password_type: PasswordType,
 ) -> Result<(), Error> {
     let field = password_type.field_name();
-    info!("Changing {field} password for site {site_slug}");
+    info!("Updating {field} password for site {site_slug}");
 
     dynamo
         .update_item()

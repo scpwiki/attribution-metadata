@@ -11,7 +11,10 @@
  *
  */
 
-use crate::password::{check_password, ChangePasswordInput, CheckPasswordInput};
+use crate::password::{
+    check_password, update_password, ChangePasswordInput, CheckPasswordInput,
+    PasswordType,
+};
 use crate::result::ServiceResult;
 use crate::utils::*;
 use lambda_http::{Body, Error, Request, RequestExt, Response};
@@ -82,11 +85,11 @@ pub async fn handle_password_check(req: Request) -> Result<(u16, String), Error>
     info!(site_slug, password_type = password_type.field_name());
 
     check_password!(dynamo, site_slug, password, password_type);
-    Ok((200, success()?))
+    success!()
 }
 
-pub async fn handle_password_change(req: Request) -> Result<(u16, String), Error> {
-    info!("Received password change request");
+pub async fn handle_password_update(req: Request) -> Result<(u16, String), Error> {
+    info!("Received password update request");
 
     let dynamo = connect_dynamo_db().await;
     let ChangePasswordInput {
@@ -97,7 +100,10 @@ pub async fn handle_password_change(req: Request) -> Result<(u16, String), Error
         admin_password,
     } = parse_body!(&req);
 
-    todo!()
+    check_password!(dynamo, site_slug, admin_password, PasswordType::Admin);
+    check_password!(dynamo, site_slug, old_password, password_type);
+    update_password(&dynamo, site_slug, new_password, password_type).await?;
+    success!()
 }
 
 pub fn handle_info() -> Result<(u16, String), Error> {
