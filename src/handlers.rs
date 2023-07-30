@@ -22,17 +22,6 @@ macro_rules! input_error {
     };
 }
 
-/*
-* XXX
-
-   // Extract some useful information from the request
-   let who = event
-       .query_string_parameters_ref()
-       .and_then(|params| params.first("name"))
-       .unwrap_or("world");
-   let message = format!("Hello {who}, this is an AWS Lambda HTTP request");
-*/
-
 pub async fn handle_get_page_attribution(req: Request) -> Result<(u16, String), Error> {
     info!("Received page attribution request");
 
