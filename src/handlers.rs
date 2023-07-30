@@ -11,9 +11,9 @@
  *
  */
 
-use super::password::{check_password, ChangePasswordInput, CheckPasswordInput};
-use super::result::ServiceResult;
-use super::utils::*;
+use crate::password::{check_password, ChangePasswordInput, CheckPasswordInput};
+use crate::result::ServiceResult;
+use crate::utils::*;
 use lambda_http::{Body, Error, Request, RequestExt, Response};
 
 macro_rules! input_error {

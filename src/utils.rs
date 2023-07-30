@@ -11,8 +11,8 @@
  *
  */
 
-use super::password::PasswordType;
-use super::result::ServiceResult;
+use crate::password::PasswordType;
+use crate::result::ServiceResult;
 use aws_sdk_dynamodb::Client as DynamoClient;
 use lambda_http::{Body, Error, Request, RequestExt, Response};
 use serde::Deserialize;
