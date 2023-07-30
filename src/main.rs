@@ -35,7 +35,7 @@ mod build {
 
 use self::handlers::*;
 use http::method::Method;
-use lambda_http::{run, service_fn, Body, Error, Request, RequestExt, Response};
+use lambda_http::{run, service_fn, Body, Error, Request, Response};
 
 /// Main handler for Lambda requests.
 ///

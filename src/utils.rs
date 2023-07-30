@@ -14,11 +14,9 @@
 use crate::password::PasswordType;
 use crate::result::ServiceResult;
 use aws_sdk_dynamodb::Client as DynamoClient;
-use lambda_http::{Body, Error, Request, RequestExt, Response};
-use serde::Deserialize;
+use lambda_http::Error;
 use std::error::Error as StdError;
 use std::fmt::Display;
-use tracing::Level;
 
 // Setup
 

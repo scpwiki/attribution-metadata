@@ -17,7 +17,7 @@ use crate::password::{
 };
 use crate::result::ServiceResult;
 use crate::utils::*;
-use lambda_http::{Body, Error, Request, RequestExt, Response};
+use lambda_http::{Body, Error, Request, RequestExt};
 
 macro_rules! input_error {
     ($message:expr) => {
