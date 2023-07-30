@@ -11,4 +11,6 @@
  *
  */
 
+const TABLE: &str = "attribution_metadata";
+
 // TODO
