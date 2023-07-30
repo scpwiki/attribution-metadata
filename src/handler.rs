@@ -13,6 +13,7 @@
 
 use super::result::ServiceResult;
 use lambda_http::{Body, Error, Request, RequestExt, Response};
+use serde::Deserialize;
 
 pub async fn handle_password_check(req: Request) -> Result<(u16, String), Error> {
     todo!()
@@ -31,4 +32,18 @@ pub fn handle_missing_route(path: &str) -> Result<(u16, String), Error> {
     .to_json()?;
 
     Ok((400, body))
+}
+
+fn parse_body<'de, T>(body: &'de Body) -> Result<T, Error>
+where
+    T: Deserialize<'de>,
+{
+    let bytes = match body {
+        Body::Empty => &[],
+        Body::Text(string) => string.as_bytes(),
+        Body::Binary(bytes) => bytes.as_slice(),
+    };
+
+    let data = serde_json::from_slice(bytes)?;
+    Ok(data)
 }
