@@ -100,6 +100,48 @@ pub async fn handle_password_change(req: Request) -> Result<(u16, String), Error
     todo!()
 }
 
+pub fn handle_info() -> Result<(u16, String), Error> {
+    info!("Received info request");
+
+    #[derive(Serialize, Debug)]
+    struct BuildInfo {
+        version_major: &'static str,
+        version_minor: &'static str,
+        version_patch: &'static str,
+        target: &'static str,
+        host: &'static str,
+        profile: &'static str,
+        family: &'static str,
+        endian: &'static str,
+        pointer_width: &'static str,
+        rustc: &'static str,
+        rustdoc: &'static str,
+        opt_level: &'static str,
+        num_jobs: u32,
+        features: &'static [&'static str],
+    }
+
+    let body = ServiceResult::success(BuildInfo {
+        version_major: crate::build::PKG_VERSION_MAJOR,
+        version_minor: crate::build::PKG_VERSION_MINOR,
+        version_patch: crate::build::PKG_VERSION_PATCH,
+        target: crate::build::TARGET,
+        host: crate::build::HOST,
+        profile: crate::build::PROFILE,
+        family: crate::build::CFG_FAMILY,
+        endian: crate::build::CFG_ENDIAN,
+        pointer_width: crate::build::CFG_POINTER_WIDTH,
+        rustc: crate::build::RUSTC_VERSION,
+        rustdoc: crate::build::RUSTDOC_VERSION,
+        opt_level: crate::build::OPT_LEVEL,
+        num_jobs: crate::build::NUM_JOBS,
+        features: &crate::build::FEATURES,
+    })
+    .to_json()?;
+
+    Ok((200, body))
+}
+
 pub fn handle_ping() -> Result<(u16, String), Error> {
     info!("Received ping request");
     let body = ServiceResult::success("pong").to_json()?;

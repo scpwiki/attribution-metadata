@@ -51,6 +51,7 @@ async fn function_handler(req: Request) -> Result<Response<Body>, Error> {
         ("/attribution/site", &Method::GET) => handle_get_site_attributions(req).await?,
         ("/password/check", &Method::POST) => handle_password_check(req).await?,
         ("/password/change", &Method::PUT) => handle_password_change(req).await?,
+        ("/info", _) => handle_info()?,
         ("/ping", _) => handle_ping()?,
         _ => handle_missing_route(path)?,
     };
