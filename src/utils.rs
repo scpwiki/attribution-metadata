@@ -16,20 +16,7 @@ use super::result::ServiceResult;
 use aws_sdk_dynamodb::Client as DynamoClient;
 use lambda_http::{Body, Error, Request, RequestExt, Response};
 use serde::Deserialize;
-
-pub fn parse_body<'de, T>(req: &'de Request) -> Result<T, Error>
-where
-    T: Deserialize<'de>,
-{
-    let bytes = match req.body() {
-        Body::Empty => &[],
-        Body::Text(string) => string.as_bytes(),
-        Body::Binary(bytes) => bytes.as_slice(),
-    };
-
-    let data = serde_json::from_slice(bytes)?;
-    Ok(data)
-}
+use std::error::Error as StdError;
 
 pub async fn connect_dynamo_db() -> DynamoClient {
     let config = aws_config::load_from_env().await;
@@ -56,7 +43,12 @@ pub fn invalid_password(password_type: PasswordType) -> Result<String, Error> {
     Ok(body)
 }
 
-pub fn service_error(error: Error) -> Result<String, Error> {
+pub fn input_error(error: &dyn StdError) -> Result<String, Error> {
+    let body = ServiceResult::error("input-invalid", str!(error)).to_json()?;
+    Ok(body)
+}
+
+pub fn service_error(error: &dyn StdError) -> Result<String, Error> {
     let body = ServiceResult::error("backend", str!(error)).to_json()?;
     Ok(body)
 }

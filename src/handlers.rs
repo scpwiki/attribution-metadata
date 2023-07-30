@@ -45,13 +45,13 @@ pub async fn handle_password_check(req: Request) -> Result<(u16, String), Error>
         site_slug,
         password,
         password_type,
-    } = parse_body(&req)?;
+    } = parse_body!(&req);
 
     let (status, result) =
         match check_password(&dynamo, site_slug, &password, password_type).await {
             Ok(true) => (200, success()),
             Ok(false) => (403, invalid_password(password_type)),
-            Err(error) => (500, service_error(error)),
+            Err(error) => (500, service_error(&*error)),
         };
 
     let body = result?;
@@ -66,7 +66,7 @@ pub async fn handle_password_change(req: Request) -> Result<(u16, String), Error
         old_password,
         new_password,
         admin_password,
-    } = parse_body(&req)?;
+    } = parse_body!(&req);
 
     todo!()
 }
