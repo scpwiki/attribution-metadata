@@ -152,7 +152,7 @@ pub fn handle_missing_route(path: &str) -> Result<(u16, String), Error> {
     error!("Received invalid request (no such route)");
     let body = ServiceResult::error(
         "invalid-route",
-        format!("No handler exists for path {path:?}"),
+        format!("No handler exists for path '{path}'"),
     )
     .to_json()?;
 
