@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 aws-config = "0.55"
 aws-sdk-dynamodb = "0.28"
+color-backtrace = "0.5"
 http = "0.2"
 lambda_http = "0.8"
 lambda_runtime = "0.8"

@@ -72,6 +72,8 @@ async fn function_handler(req: Request) -> Result<Response<Body>, Error> {
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
+    color_backtrace::install();
+
     tracing_subscriber::fmt()
         .with_max_level(tracing::Level::INFO)
         .with_target(false) // disable printing the name of the module in every log line
