@@ -28,18 +28,22 @@ use lambda_http::{Body, Error, Request, RequestExt, Response};
 */
 
 pub async fn handle_get_page_attribution(req: Request) -> Result<(u16, String), Error> {
+    info!("Received page attribution request");
     todo!()
 }
 
 pub async fn handle_set_page_attribution(req: Request) -> Result<(u16, String), Error> {
+    info!("Received page attribution update request");
     todo!()
 }
 
 pub async fn handle_get_site_attributions(req: Request) -> Result<(u16, String), Error> {
+    info!("Received site attribution list request");
     todo!()
 }
 
 pub async fn handle_password_check(req: Request) -> Result<(u16, String), Error> {
+    info!("Received password check request");
     let dynamo = connect_dynamo_db().await;
     let CheckPasswordInput {
         site_slug,
@@ -59,6 +63,7 @@ pub async fn handle_password_check(req: Request) -> Result<(u16, String), Error>
 }
 
 pub async fn handle_password_change(req: Request) -> Result<(u16, String), Error> {
+    info!("Received password change request");
     let dynamo = connect_dynamo_db().await;
     let ChangePasswordInput {
         site_slug,
@@ -72,11 +77,13 @@ pub async fn handle_password_change(req: Request) -> Result<(u16, String), Error
 }
 
 pub fn handle_ping() -> Result<(u16, String), Error> {
+    info!("Received ping request");
     let body = ServiceResult::success("pong").to_json()?;
     Ok((200, body))
 }
 
 pub fn handle_missing_route(path: &str) -> Result<(u16, String), Error> {
+    error!("Received invalid request (no such route)");
     let body = ServiceResult::error(
         "invalid-route",
         format!("No handler exists for path {path:?}"),
