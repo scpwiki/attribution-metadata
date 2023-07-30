@@ -28,14 +28,13 @@ pub async fn connect_dynamo_db() -> DynamoClient {
 // ServiceResult output helpers
 
 pub fn success() -> Result<String, Error> {
-    event!(Level::DEBUG, "Returning empty success response");
+    debug!("Returning empty success response");
     let body = ServiceResult::success(()).to_json()?;
     Ok(body)
 }
 
 pub fn invalid_password(password_type: PasswordType) -> Result<String, Error> {
-    event!(
-        Level::ERROR,
+    error!(
         "Error, invalid password was used for {}",
         password_type.field_name(),
     );
@@ -53,13 +52,13 @@ pub fn invalid_password(password_type: PasswordType) -> Result<String, Error> {
 }
 
 pub fn input_error(error: &dyn Display) -> Result<String, Error> {
-    event!(Level::ERROR, "Error processing input: {error}");
+    error!("Error processing input: {error}");
     let body = ServiceResult::error("input-invalid", str!(error)).to_json()?;
     Ok(body)
 }
 
 pub fn service_error(error: &dyn StdError) -> Result<String, Error> {
-    event!(Level::ERROR, "General backend error caught: {error}");
+    error!("General backend error caught: {error}");
     let body = ServiceResult::error("backend", str!(error)).to_json()?;
     Ok(body)
 }
