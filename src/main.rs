@@ -28,6 +28,7 @@ mod macros;
 
 mod attribution;
 mod handlers;
+mod object;
 mod password;
 mod result;
 mod utils;
