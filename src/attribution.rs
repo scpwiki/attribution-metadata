@@ -12,12 +12,16 @@
  */
 
 use crate::utils::replace_in_place;
-use aws_sdk_dynamodb::{types::AttributeValue, Client as DynamoClient};
+use aws_sdk_dynamodb::{
+    types::{AttributeValue, Select},
+    Client as DynamoClient,
+};
 use lambda_http::Error;
 use once_cell::sync::Lazy;
 use regex::Regex;
 use std::convert::TryFrom;
 use std::num::NonZeroU32;
+use tokio_stream::StreamExt;
 
 const TABLE: &str = "attribution_metadata";
 
@@ -131,6 +135,29 @@ impl TryFrom<Attribution> for AttributeValue {
     }
 }
 
+pub async fn get_site_attribution(
+    dynamo: &DynamoClient,
+    site_slug: String,
+) -> Result<Vec<Attribution>, Error> {
+    info!("Getting all attribution data for site {site_slug}");
+
+    let result: Result<Vec<_>, _> = dynamo
+        .scan()
+        .table_name(TABLE)
+        .select(Select::SpecificAttributes)
+        .filter_expression("site_slug = :site_slug")
+        .expression_attribute_values("site_slug", AttributeValue::S(site_slug))
+        .into_paginator()
+        .items()
+        .send()
+        .collect()
+        .await;
+
+    let attributions = result?;
+
+    todo!()
+}
+
 pub async fn get_page_attribution(
     dynamo: &DynamoClient,
     site_slug: String,
@@ -138,7 +165,7 @@ pub async fn get_page_attribution(
 ) -> Result<Attribution, Error> {
     info!("Getting attribution data for site {site_slug}, page {page_slug}");
 
-    let result = dynamo
+    let attribution = dynamo
         .get_item()
         .table_name(TABLE)
         .key("site_slug", AttributeValue::S(site_slug))
