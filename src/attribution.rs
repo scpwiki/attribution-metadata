@@ -295,8 +295,8 @@ pub async fn get_site_attribution(
             .query()
             .table_name(TABLE)
             .limit(1000)
+            .key("site_slug = :site_slug")
             .set_exclusive_start_key(exclusive_start_key)
-            .key_condition_expression("site_slug = :site_slug")
             .expression_attribute_values("site_slug", AttributeValue::S(str!(site_slug)))
             .send()
             .await?;
