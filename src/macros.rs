@@ -39,14 +39,6 @@ macro_rules! check_password {
     };
 }
 
-macro_rules! check_attrib {
-    ($attribution:expr) => {
-        if let Err(error) = $attrbution.validate() {
-            return Ok((400, input_error(&error)));
-        }
-    };
-}
-
 macro_rules! success {
     () => {
         Ok((200, success()?))

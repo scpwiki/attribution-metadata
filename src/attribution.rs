@@ -137,14 +137,14 @@ impl TryFrom<Attribution> for AttributeValue {
 
 pub async fn get_site_attribution(
     dynamo: &DynamoClient,
-    site_slug: String,
+    site_slug: &str,
 ) -> Result<Vec<Attribution>, Error> {
     let result: Result<Vec<_>, _> = dynamo
         .scan()
         .table_name(TABLE)
         .select(Select::SpecificAttributes)
         .filter_expression("site_slug = :site_slug")
-        .expression_attribute_values("site_slug", AttributeValue::S(site_slug))
+        .expression_attribute_values("site_slug", AttributeValue::S(str!(site_slug)))
         .into_paginator()
         .items()
         .send()

@@ -11,6 +11,7 @@
  *
  */
 
+use crate::attribution::{get_page_attribution, get_site_attribution};
 use crate::password::{
     check_password, update_password, ChangePasswordInput, CheckPasswordInput,
     PasswordType,
@@ -59,17 +60,22 @@ pub async fn handle_set_page(req: Request) -> Result<(u16, String), Error> {
 pub async fn handle_get_site(req: Request) -> Result<(u16, String), Error> {
     info!("Received site attribution list request");
 
-    // We only need one URL parameter here.
-
+    let dynamo = connect_dynamo_db().await;
     let site_slug = match req
         .query_string_parameters_ref()
         .and_then(|params| params.first("site"))
     {
+        // We only need one URL parameter here.
         Some(site_slug) => site_slug,
         None => input_error!("missing URL parameter 'site'"),
     };
 
-    todo!()
+    info!(site_slug);
+
+    match get_site_attribution(&dynamo, site_slug).await {
+        Ok(attributions) => Ok((200, serde_json::to_string(&attributions)?)),
+        Err(error) => Ok((500, service_error(&*error)?)),
+    }
 }
 
 pub async fn handle_password_check(req: Request) -> Result<(u16, String), Error> {
