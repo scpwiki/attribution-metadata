@@ -62,8 +62,6 @@ pub async fn check_password(
     password_type: PasswordType,
 ) -> Result<bool, Error> {
     let field = password_type.field_name();
-    info!("Checking {field} password for site {site_slug}");
-
     let result = dynamo
         .get_item()
         .table_name(TABLE)
@@ -95,8 +93,6 @@ pub async fn update_password(
     password_type: PasswordType,
 ) -> Result<(), Error> {
     let field = password_type.field_name();
-    info!("Updating {field} password for site {site_slug}");
-
     dynamo
         .update_item()
         .table_name(TABLE)

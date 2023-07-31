@@ -139,8 +139,6 @@ pub async fn get_site_attribution(
     dynamo: &DynamoClient,
     site_slug: String,
 ) -> Result<Vec<Attribution>, Error> {
-    info!("Getting all attribution data for site {site_slug}");
-
     let result: Result<Vec<_>, _> = dynamo
         .scan()
         .table_name(TABLE)
@@ -163,8 +161,6 @@ pub async fn get_page_attribution(
     site_slug: String,
     page_slug: String,
 ) -> Result<Attribution, Error> {
-    info!("Getting attribution data for site {site_slug}, page {page_slug}");
-
     let attribution = dynamo
         .get_item()
         .table_name(TABLE)

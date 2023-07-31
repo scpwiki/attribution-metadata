@@ -83,7 +83,6 @@ pub async fn handle_password_check(req: Request) -> Result<(u16, String), Error>
     } = parse_body!(&req);
 
     info!(site_slug, password_type = password_type.field_name());
-
     check_password!(dynamo, site_slug, password, password_type);
     success!()
 }
@@ -100,6 +99,7 @@ pub async fn handle_password_update(req: Request) -> Result<(u16, String), Error
         admin_password,
     } = parse_body!(&req);
 
+    info!(site_slug, password_type = password_type.field_name());
     check_password!(dynamo, site_slug, admin_password, PasswordType::Admin);
     check_password!(dynamo, site_slug, old_password, password_type);
     update_password(&dynamo, site_slug, new_password, password_type).await?;
