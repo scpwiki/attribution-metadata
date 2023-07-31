@@ -143,6 +143,23 @@ pub struct UpdatePageAttributionInput {
     pub attributions: Attribution,
 }
 
+pub async fn get_page_attribution(
+    dynamo: &DynamoClient,
+    site_slug: &str,
+    page_slug: &str,
+) -> Result<Attribution, Error> {
+    let attribution = dynamo
+        .get_item()
+        .table_name(TABLE)
+        .key("site_slug", AttributeValue::S(str!(site_slug)))
+        .key("page_slug", AttributeValue::S(str!(page_slug)))
+        .projection_expression("attribution")
+        .send()
+        .await?;
+
+    todo!()
+}
+
 pub async fn get_site_attribution(
     dynamo: &DynamoClient,
     site_slug: &str,
@@ -160,23 +177,6 @@ pub async fn get_site_attribution(
         .await;
 
     let attributions = result?;
-
-    todo!()
-}
-
-pub async fn get_page_attribution(
-    dynamo: &DynamoClient,
-    site_slug: &str,
-    page_slug: &str,
-) -> Result<Attribution, Error> {
-    let attribution = dynamo
-        .get_item()
-        .table_name(TABLE)
-        .key("site_slug", AttributeValue::S(str!(site_slug)))
-        .key("page_slug", AttributeValue::S(str!(page_slug)))
-        .projection_expression("attribution")
-        .send()
-        .await?;
 
     todo!()
 }
