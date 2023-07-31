@@ -291,6 +291,7 @@ pub async fn get_site_attribution(
                     attributions.push(object.into());
                 }
 
+                // Set flag for last item received to continue pagination
                 match result.last_evaluated_key {
                     None => break,
                     Some(last_evaluated_key) => {
