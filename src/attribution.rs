@@ -243,6 +243,22 @@ pub async fn update_page_attribution(
     Ok(())
 }
 
+pub async fn delete_page_attribution(
+    dynamo: &DynamoClient,
+    site_slug: String,
+    page_slug: String,
+) -> Result<(), Error> {
+    dynamo
+        .delete_item()
+        .table_name(TABLE)
+        .key("site_slug", AttributeValue::S(site_slug))
+        .key("page_slug", AttributeValue::S(page_slug))
+        .send()
+        .await?;
+
+    Ok(())
+}
+
 pub async fn get_page_attribution(
     dynamo: &DynamoClient,
     site_slug: &str,

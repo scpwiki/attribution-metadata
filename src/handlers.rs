@@ -12,8 +12,8 @@
  */
 
 use crate::attribution::{
-    get_page_attribution, get_site_attribution, update_page_attribution,
-    UpdatePageAttributionInput,
+    delete_page_attribution, get_page_attribution, get_site_attribution,
+    update_page_attribution, UpdatePageAttributionInput,
 };
 use crate::password::{
     check_password, update_password, CheckPasswordInput, PasswordType,
@@ -75,17 +75,24 @@ pub async fn handle_set_page(req: Request) -> Result<(u16, String), Error> {
     );
 
     check_password!(dynamo, site_slug, password, PasswordType::Regular);
-    let attributions_object = match attributions.try_into() {
-        Ok(object) => object,
-        Err(message) => return Ok((400, message)),
-    };
 
-    json_output!(update_page_attribution(
-        &dynamo,
-        site_slug,
-        page_slug,
-        attributions_object,
-    ))
+    if attributions.0.is_empty() {
+        info!("List of attributions for page is empty, deleting item");
+        json_output!(delete_page_attribution(&dynamo, site_slug, page_slug))
+    } else {
+        debug!("Converting attributions to be inserted");
+        let attributions_object = match attributions.try_into() {
+            Ok(object) => object,
+            Err(message) => return Ok((400, message)),
+        };
+
+        json_output!(update_page_attribution(
+            &dynamo,
+            site_slug,
+            page_slug,
+            attributions_object,
+        ))
+    }
 }
 
 pub async fn handle_get_site(req: Request) -> Result<(u16, String), Error> {
