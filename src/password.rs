@@ -44,7 +44,7 @@ pub struct CheckPasswordInput {
 }
 
 #[derive(Deserialize, Debug)]
-pub struct ChangePasswordInput {
+pub struct UpdatePasswordInput {
     #[serde(rename = "site")]
     pub site_slug: String,
 

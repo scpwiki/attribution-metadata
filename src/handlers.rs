@@ -13,7 +13,7 @@
 
 use crate::attribution::{get_page_attribution, get_site_attribution};
 use crate::password::{
-    check_password, update_password, ChangePasswordInput, CheckPasswordInput,
+    check_password, update_password, UpdatePasswordInput, CheckPasswordInput,
     PasswordType,
 };
 use crate::result::ServiceResult;
@@ -97,7 +97,7 @@ pub async fn handle_password_update(req: Request) -> Result<(u16, String), Error
     info!("Received password update request");
 
     let dynamo = connect_dynamo_db().await;
-    let ChangePasswordInput {
+    let UpdatePasswordInput {
         site_slug,
         password_type,
         old_password,
