@@ -53,7 +53,7 @@ async fn function_handler(req: Request) -> Result<Response<Body>, Error> {
         ("/attribution/page", &Method::GET) => handle_get_page(req).await?,
         ("/attribution/page", &Method::PUT) => handle_set_page(req).await?,
         ("/attribution/site", &Method::GET) => handle_get_site(req).await?,
-        ("/password/check", &Method::POST) => handle_password_check(req).await?,
+        ("/password/check", &Method::PUT) => handle_password_check(req).await?,
         ("/password/update", &Method::PUT) => handle_password_update(req).await?,
         ("/info", _) => handle_info()?,
         ("/ping", _) => handle_ping()?,
