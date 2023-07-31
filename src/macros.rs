@@ -39,6 +39,15 @@ macro_rules! check_password {
     };
 }
 
+macro_rules! json_output {
+    ($future:expr) => {
+        match $future.await {
+            Ok(object) => Ok((200, serde_json::to_string(&object)?)),
+            Err(error) => Ok((500, service_error(&*error)?)),
+        }
+    };
+}
+
 macro_rules! success {
     () => {
         Ok((200, success()?))

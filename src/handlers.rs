@@ -29,6 +29,9 @@ macro_rules! input_error {
 pub async fn handle_get_page(req: Request) -> Result<(u16, String), Error> {
     info!("Received page attribution request");
 
+    // Setup
+    let dynamo = connect_dynamo_db().await;
+
     // We use URL parameters because this is a GET request.
 
     let params = match req.query_string_parameters_ref() {
@@ -47,8 +50,7 @@ pub async fn handle_get_page(req: Request) -> Result<(u16, String), Error> {
     };
 
     info!(site_slug, page_slug);
-
-    todo!()
+    json_output!(get_page_attribution(&dynamo, site_slug, page_slug))
 }
 
 pub async fn handle_set_page(req: Request) -> Result<(u16, String), Error> {
@@ -60,22 +62,20 @@ pub async fn handle_set_page(req: Request) -> Result<(u16, String), Error> {
 pub async fn handle_get_site(req: Request) -> Result<(u16, String), Error> {
     info!("Received site attribution list request");
 
+    // Setup
     let dynamo = connect_dynamo_db().await;
+
+    // We only need one URL parameter here.
     let site_slug = match req
         .query_string_parameters_ref()
         .and_then(|params| params.first("site"))
     {
-        // We only need one URL parameter here.
         Some(site_slug) => site_slug,
         None => input_error!("missing URL parameter 'site'"),
     };
 
     info!(site_slug);
-
-    match get_site_attribution(&dynamo, site_slug).await {
-        Ok(attributions) => Ok((200, serde_json::to_string(&attributions)?)),
-        Err(error) => Ok((500, service_error(&*error)?)),
-    }
+    json_output!(get_site_attribution(&dynamo, site_slug))
 }
 
 pub async fn handle_password_check(req: Request) -> Result<(u16, String), Error> {

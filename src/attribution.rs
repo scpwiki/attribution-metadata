@@ -158,14 +158,14 @@ pub async fn get_site_attribution(
 
 pub async fn get_page_attribution(
     dynamo: &DynamoClient,
-    site_slug: String,
-    page_slug: String,
+    site_slug: &str,
+    page_slug: &str,
 ) -> Result<Attribution, Error> {
     let attribution = dynamo
         .get_item()
         .table_name(TABLE)
-        .key("site_slug", AttributeValue::S(site_slug))
-        .key("page_slug", AttributeValue::S(page_slug))
+        .key("site_slug", AttributeValue::S(str!(site_slug)))
+        .key("page_slug", AttributeValue::S(str!(page_slug)))
         .projection_expression("attribution")
         .send()
         .await?;
