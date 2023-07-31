@@ -98,7 +98,7 @@ pub async fn update_password(
         .table_name(TABLE)
         .key("site_slug", AttributeValue::S(site_slug))
         .update_expression(format!("SET {field} = :password"))
-        .expression_attribute_values("password", AttributeValue::S(password))
+        .expression_attribute_values(":password", AttributeValue::S(password))
         .send()
         .await?;
 

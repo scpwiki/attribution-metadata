@@ -155,7 +155,7 @@ pub async fn update_page_attribution(
         .key("site_slug", AttributeValue::S(site_slug))
         .key("page_slug", AttributeValue::S(page_slug))
         .update_expression("SET attribution = :attribution")
-        .expression_attribute_values("attribution", attributions)
+        .expression_attribute_values(":attribution", attributions)
         .send()
         .await?;
 
