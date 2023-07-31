@@ -93,14 +93,16 @@ pub async fn get_site_attribution(
     let mut attributions = Vec::new();
     let mut exclusive_start_key = None;
 
-    // Maximum body size from DynamoDB is 1 MB, so we fetch repeatedly
+    // Maximum body size from DynamoDB is 1 MB, so we may need to fetch repeatedly
     loop {
+        info!("Running full-site scan (start {exclusive_start_key:?})");
+
         let result = dynamo
-            .query()
+            .scan()
             .table_name(TABLE)
             .limit(1000)
             .set_exclusive_start_key(exclusive_start_key)
-            .key_condition_expression("site_slug = :site_slug")
+            .filter_expression("site_slug = :site_slug")
             .expression_attribute_values(":site_slug", AttributeValue::S(str!(site_slug)))
             .send()
             .await?;
