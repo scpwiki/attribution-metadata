@@ -21,7 +21,6 @@ use once_cell::sync::Lazy;
 use regex::Regex;
 use std::convert::TryFrom;
 use std::num::NonZeroU32;
-use tokio_stream::StreamExt;
 
 const TABLE: &str = "attribution_metadata";
 
@@ -183,19 +182,35 @@ pub async fn get_site_attribution(
     dynamo: &DynamoClient,
     site_slug: &str,
 ) -> Result<Vec<Attribution>, Error> {
-    let result: Result<Vec<_>, _> = dynamo
-        .scan()
-        .table_name(TABLE)
-        .select(Select::SpecificAttributes)
-        .filter_expression("site_slug = :site_slug")
-        .expression_attribute_values("site_slug", AttributeValue::S(str!(site_slug)))
-        .into_paginator()
-        .items()
-        .send()
-        .collect()
-        .await;
+    let mut attributions = Vec::new();
+    let mut exclusive_start_key = None;
 
-    let attributions = result?;
+    // Maximum body size from DynamoDB is 1 MB, so we fetch repeatedly
+    loop {
+        let result = dynamo
+            .query()
+            .table_name(TABLE)
+            .limit(500)
+            .set_exclusive_start_key(exclusive_start_key)
+            .key_condition_expression("site_slug = :site_slug")
+            .expression_attribute_values("site_slug", AttributeValue::S(str!(site_slug)))
+            .send()
+            .await?;
+
+        match result.items {
+            None => break,
+            Some(items) => {
+                attributions.extend(items);
+
+                match result.last_evaluated_key {
+                    None => break,
+                    Some(last_evaluated_key) => {
+                        exclusive_start_key = Some(last_evaluated_key);
+                    }
+                }
+            }
+        }
+    }
 
     todo!()
 }
