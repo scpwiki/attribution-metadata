@@ -215,7 +215,10 @@ impl From<&'_ AttributeValue> for Attribution {
 
 #[derive(Deserialize, Debug)]
 pub struct UpdatePageAttributionInput {
+    #[serde(rename = "site")]
     pub site_slug: String,
+
+    #[serde(rename = "page")]
     pub page_slug: String,
     pub password: String,
     pub attributions: Attribution,
