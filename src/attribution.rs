@@ -197,8 +197,8 @@ impl TryFrom<Attribution> for AttributeValue {
     }
 }
 
-impl From<AttributeValue> for Attribution {
-    fn from(value: AttributeValue) -> Attribution {
+impl From<&'_ AttributeValue> for Attribution {
+    fn from(value: &AttributeValue) -> Attribution {
         info!("Converting DynamoDB object to attribution list");
 
         let mut entries = Vec::new();
@@ -245,7 +245,7 @@ pub async fn get_page_attribution(
     site_slug: &str,
     page_slug: &str,
 ) -> Result<Attribution, Error> {
-    let attribution = dynamo
+    let result = dynamo
         .get_item()
         .table_name(TABLE)
         .key("site_slug", AttributeValue::S(str!(site_slug)))
@@ -254,7 +254,9 @@ pub async fn get_page_attribution(
         .send()
         .await?;
 
-    todo!()
+    let item = result.item().expect("No items returned from database");
+    let object = &item["attribution"];
+    Ok(object.into())
 }
 
 pub async fn get_site_attribution(
@@ -279,7 +281,11 @@ pub async fn get_site_attribution(
         match result.items {
             None => break,
             Some(items) => {
-                attributions.extend(items);
+                for item in items {
+                    // Convert each from DynamoDB to AttributionEntry
+                    let object = &item["attribution"];
+                    attributions.push(object.into());
+                }
 
                 match result.last_evaluated_key {
                     None => break,
@@ -291,5 +297,5 @@ pub async fn get_site_attribution(
         }
     }
 
-    todo!()
+    Ok(attributions)
 }
