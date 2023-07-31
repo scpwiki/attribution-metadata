@@ -147,9 +147,19 @@ pub async fn update_page_attribution(
     dynamo: &DynamoClient,
     site_slug: String,
     page_slug: String,
-    attributions: Attribution,
+    attributions: AttributeValue,
 ) -> Result<(), Error> {
-    todo!()
+    dynamo
+        .update_item()
+        .table_name(TABLE)
+        .key("site_slug", AttributeValue::S(site_slug))
+        .key("page_slug", AttributeValue::S(page_slug))
+        .update_expression("SET attribution = :attribution")
+        .expression_attribute_values("attribution", attributions)
+        .send()
+        .await?;
+
+    Ok(())
 }
 
 pub async fn get_page_attribution(
