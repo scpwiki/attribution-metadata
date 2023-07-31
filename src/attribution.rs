@@ -143,6 +143,15 @@ pub struct UpdatePageAttributionInput {
     pub attributions: Attribution,
 }
 
+pub async fn update_page_attribution(
+    dynamo: &DynamoClient,
+    site_slug: String,
+    page_slug: String,
+    attributions: Attribution,
+) -> Result<(), Error> {
+    todo!()
+}
+
 pub async fn get_page_attribution(
     dynamo: &DynamoClient,
     site_slug: &str,
