@@ -244,7 +244,7 @@ pub async fn get_page_attribution(
     dynamo: &DynamoClient,
     site_slug: &str,
     page_slug: &str,
-) -> Result<Attribution, Error> {
+) -> Result<Option<Attribution>, Error> {
     let result = dynamo
         .get_item()
         .table_name(TABLE)
@@ -254,9 +254,13 @@ pub async fn get_page_attribution(
         .send()
         .await?;
 
-    let item = result.item().expect("No items returned from database");
-    let object = &item["attribution"];
-    Ok(object.into())
+    match result.item() {
+        None => Ok(None),
+        Some(item) => {
+            let object = &item["attribution"];
+            Ok(Some(object.into()))
+        }
+    }
 }
 
 pub async fn get_site_attribution(
