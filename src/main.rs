@@ -57,7 +57,7 @@ async fn function_handler(req: Request) -> Result<Response<Body>, Error> {
         ("/password/update", &Method::PUT) => handle_password_update(req).await?,
         ("/info", _) => handle_info()?,
         ("/ping", _) => handle_ping()?,
-        _ => handle_missing_route(path)?,
+        _ => handle_missing_route(method.as_str(), path)?,
     };
     info!(status, body);
 

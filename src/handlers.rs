@@ -189,11 +189,11 @@ pub fn handle_ping() -> Result<(u16, String), Error> {
     Ok((200, body))
 }
 
-pub fn handle_missing_route(path: &str) -> Result<(u16, String), Error> {
+pub fn handle_missing_route(method: &str, path: &str) -> Result<(u16, String), Error> {
     info!("Received invalid request (no such route)");
     let body = ServiceResult::error(
         "invalid-route",
-        format!("No handler exists for path '{path}'"),
+        format!("No handler exists for path '{method} {path}'"),
     )
     .to_json()?;
 
