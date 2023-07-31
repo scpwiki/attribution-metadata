@@ -49,6 +49,23 @@ impl AttributionType {
     }
 }
 
+impl TryFrom<&'_ str> for AttributionType {
+    type Error = AttributionTypeConversionError;
+
+    fn try_from(value: &str) -> Result<AttributionType, Self::Error> {
+        match value {
+            "author" => Ok(AttributionType::Author),
+            "rewrite" => Ok(AttributionType::Rewrite),
+            "translator" => Ok(AttributionType::Translator),
+            "maintainer" => Ok(AttributionType::Maintainer),
+            _ => Err(AttributionTypeConversionError),
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct AttributionTypeConversionError;
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct AttributionEntry {
     #[serde(rename = "type")]
@@ -112,6 +129,55 @@ impl TryFrom<AttributionEntry> for AttributeValue {
     }
 }
 
+impl From<&'_ AttributeValue> for AttributionEntry {
+    fn from(value: &AttributeValue) -> AttributionEntry {
+        debug!("Converting DynamoDB object to attribution entry");
+
+        // Very ugly. If there is a serde solution for AttributeValue -> object,
+        //            please replace this with that instead.
+
+        let map = value
+            .as_m()
+            .expect("Top-level item for attribution not map");
+
+        let attribution_type_raw: &str =
+            map["type"].as_s().expect("Field 'type' not string");
+
+        let attribution_type = attribution_type_raw
+            .try_into()
+            .expect("Field 'type' not valid AttributionType enum value");
+
+        let user_name = map["user_name"]
+            .as_s()
+            .expect("Field 'user_name' not string")
+            .to_string();
+
+        let user_id = match &map["user_id"] {
+            AttributeValue::Null(true) => None,
+            AttributeValue::N(value) => {
+                let user_id = value
+                    .parse()
+                    .expect("Field 'user_id' not valid integer value");
+                Some(user_id)
+            }
+            _ => panic!("Field 'user_id' not number or null'"),
+        };
+
+        let date = match &map["date"] {
+            AttributeValue::Null(true) => None,
+            AttributeValue::S(value) => Some(str!(value)),
+            _ => panic!("Field 'date' not number or string"),
+        };
+
+        AttributionEntry {
+            attribution_type,
+            user_name,
+            user_id,
+            date,
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Attribution(pub Vec<AttributionEntry>);
 
@@ -119,7 +185,7 @@ impl TryFrom<Attribution> for AttributeValue {
     type Error = String;
 
     fn try_from(attribution: Attribution) -> Result<AttributeValue, String> {
-        info!("Converting attribution entry to DynamoDB object");
+        info!("Converting attribution list to DynamoDB object");
 
         let mut values = Vec::new();
         for entry in attribution.0 {
@@ -128,6 +194,22 @@ impl TryFrom<Attribution> for AttributeValue {
         }
 
         Ok(AttributeValue::L(values))
+    }
+}
+
+impl From<AttributeValue> for Attribution {
+    fn from(value: AttributeValue) -> Attribution {
+        info!("Converting DynamoDB object to attribution list");
+
+        let mut entries = Vec::new();
+        let list = value
+            .as_l()
+            .expect("Top-level item for attribution not list");
+        for value in list {
+            entries.push(value.into());
+        }
+
+        Attribution(entries)
     }
 }
 
