@@ -72,6 +72,7 @@ pub async fn handle_set_page(req: Request) -> Result<(u16, String), Error> {
         page_slug,
         attributions_len = attributions.0.len(),
     );
+    check_password!(dynamo, site_slug, password, PasswordType::Regular);
 
     todo!()
 }
