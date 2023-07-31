@@ -220,3 +220,14 @@ impl From<&'_ AttributeValue> for Attribution {
         Attribution(entries)
     }
 }
+
+/// A complete attribution object (within a site).
+///
+/// This is similar to the data row stored within DynamoDB, except
+/// lacking the site data because it would be the same when fetching
+/// a full suite of attributions for a site.
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct FullAttribution {
+    pub page_slug: String,
+    pub attribution: Attribution,
+}

@@ -11,7 +11,7 @@
  *
  */
 
-use crate::object::Attribution;
+use crate::object::{Attribution, FullAttribution};
 use aws_sdk_dynamodb::{types::AttributeValue, Client as DynamoClient};
 use lambda_http::Error;
 
@@ -89,7 +89,7 @@ pub async fn get_page_attribution(
 pub async fn get_site_attribution(
     dynamo: &DynamoClient,
     site_slug: &str,
-) -> Result<Vec<Attribution>, Error> {
+) -> Result<Vec<FullAttribution>, Error> {
     let mut attributions = Vec::new();
     let mut exclusive_start_key = None;
 
@@ -111,9 +111,21 @@ pub async fn get_site_attribution(
             None => break,
             Some(items) => {
                 for item in items {
+                    // Extract page_slug
+                    let page_slug = item["page_slug"]
+                        .as_s()
+                        .expect("Field 'page_slug' not string")
+                        .clone();
+
                     // Convert each from DynamoDB to AttributionEntry
-                    let object = &item["attribution"];
-                    attributions.push(object.into());
+                    let attribution_raw = &item["attribution"];
+                    let attribution = attribution_raw.into();
+
+                    // Create and push FullAttribution object
+                    attributions.push(FullAttribution {
+                        page_slug,
+                        attribution,
+                    });
                 }
 
                 // Set flag for last item received to continue pagination
