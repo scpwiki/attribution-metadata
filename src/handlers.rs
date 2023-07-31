@@ -78,7 +78,7 @@ pub async fn handle_set_page(req: Request) -> Result<(u16, String), Error> {
 
     if attributions.0.is_empty() {
         info!("List of attributions for page is empty, deleting item");
-        json_output!(delete_page_attribution(&dynamo, site_slug, page_slug))
+        success_output!(delete_page_attribution(&dynamo, site_slug, page_slug))
     } else {
         debug!("Converting attributions to be inserted");
         let attributions_object = match attributions.try_into() {
@@ -86,7 +86,7 @@ pub async fn handle_set_page(req: Request) -> Result<(u16, String), Error> {
             Err(message) => return Ok((400, message)),
         };
 
-        json_output!(update_page_attribution(
+        success_output!(update_page_attribution(
             &dynamo,
             site_slug,
             page_slug,

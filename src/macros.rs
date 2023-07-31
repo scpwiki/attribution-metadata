@@ -48,6 +48,15 @@ macro_rules! json_output {
     };
 }
 
+macro_rules! success_output {
+    ($future:expr) => {
+        match $future.await {
+            Ok(_) => Ok((200, success()?)),
+            Err(error) => Ok((500, service_error(&*error)?)),
+        }
+    };
+}
+
 macro_rules! success {
     () => {
         Ok((200, success()?))
