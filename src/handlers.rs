@@ -12,7 +12,8 @@
  */
 
 use crate::attribution::{
-    get_page_attribution, get_site_attribution, UpdatePageAttributionInput,
+    get_page_attribution, get_site_attribution, update_page_attribution,
+    UpdatePageAttributionInput,
 };
 use crate::password::{
     check_password, update_password, CheckPasswordInput, PasswordType,
@@ -73,8 +74,12 @@ pub async fn handle_set_page(req: Request) -> Result<(u16, String), Error> {
         attributions_len = attributions.0.len(),
     );
     check_password!(dynamo, site_slug, password, PasswordType::Regular);
-
-    todo!()
+    json_output!(update_page_attribution(
+        &dynamo,
+        site_slug,
+        page_slug,
+        attributions,
+    ))
 }
 
 pub async fn handle_get_site(req: Request) -> Result<(u16, String), Error> {
