@@ -12,10 +12,7 @@
  */
 
 use crate::utils::replace_in_place;
-use aws_sdk_dynamodb::{
-    types::{AttributeValue, Select},
-    Client as DynamoClient,
-};
+use aws_sdk_dynamodb::{types::AttributeValue, Client as DynamoClient};
 use lambda_http::Error;
 use once_cell::sync::Lazy;
 use regex::Regex;
