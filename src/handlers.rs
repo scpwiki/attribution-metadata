@@ -65,7 +65,7 @@ pub async fn handle_set_page(req: Request) -> Result<(u16, String), Error> {
         site_slug,
         page_slug,
         password,
-        attributions,
+        mut attributions,
     } = parse_body!(&req);
 
     info!(
@@ -81,6 +81,9 @@ pub async fn handle_set_page(req: Request) -> Result<(u16, String), Error> {
         success_output!(delete_page_attribution(&dynamo, site_slug, page_slug))
     } else {
         debug!("Converting attributions to be inserted");
+
+        attributions.sort();
+
         let attributions_object = match attributions.try_into() {
             Ok(object) => object,
             Err(message) => return Ok((400, message)),
