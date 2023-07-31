@@ -184,6 +184,8 @@ pub struct Attribution(pub Vec<AttributionEntry>);
 impl Attribution {
     /// Sorts all the attribution metadata entries based on date.
     pub fn sort(&mut self) {
+        debug!("Sorting attribution entries by date");
+
         self.0.sort_by_key(|entry| match &entry.date {
             Some(date) => date.clone(),
             None => String::new(), // We want all null entries to be first
