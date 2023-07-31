@@ -135,6 +135,14 @@ impl TryFrom<Attribution> for AttributeValue {
     }
 }
 
+#[derive(Deserialize, Debug)]
+pub struct UpdatePageAttributionInput {
+    pub site_slug: String,
+    pub page_slug: String,
+    pub password: String,
+    pub attributions: Attribution,
+}
+
 pub async fn get_site_attribution(
     dynamo: &DynamoClient,
     site_slug: &str,

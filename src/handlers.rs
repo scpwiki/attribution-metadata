@@ -11,10 +11,12 @@
  *
  */
 
-use crate::attribution::{get_page_attribution, get_site_attribution};
+use crate::attribution::{
+    get_page_attribution, get_site_attribution, UpdatePageAttributionInput,
+};
 use crate::password::{
-    check_password, update_password, UpdatePasswordInput, CheckPasswordInput,
-    PasswordType,
+    check_password, update_password, CheckPasswordInput, PasswordType,
+    UpdatePasswordInput,
 };
 use crate::result::ServiceResult;
 use crate::utils::*;
@@ -55,6 +57,21 @@ pub async fn handle_get_page(req: Request) -> Result<(u16, String), Error> {
 
 pub async fn handle_set_page(req: Request) -> Result<(u16, String), Error> {
     info!("Received page attribution update request");
+
+    // Setup
+    let dynamo = connect_dynamo_db().await;
+    let UpdatePageAttributionInput {
+        site_slug,
+        page_slug,
+        password,
+        attributions,
+    } = parse_body!(&req);
+
+    info!(
+        site_slug,
+        page_slug,
+        attributions_len = attributions.0.len(),
+    );
 
     todo!()
 }
