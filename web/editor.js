@@ -1,11 +1,3 @@
-// Constants
-const ATTRIBUTION_TYPES = [
-  'author',
-  'rewrite',
-  'translator',
-  'maintainer',
-];
-
 // Error handling
 function raiseError(primary, secondary = null) {
   const element = document.getElementById('error');
@@ -87,10 +79,19 @@ async function getUserInfo(name) {
 }
 
 // AttributionMetadataService
+
 const ATTRIB_ENDPOINT = 'https://tptm7stb3j3onds27seddf2izq0mcesv.lambda-url.us-east-2.on.aws';
 // TODO
 
 // Utilities
+
+const ATTRIBUTION_TYPES = [
+  'author',
+  'rewrite',
+  'translator',
+  'maintainer',
+];
+
 function getAttributionType(value) {
   value = value.toLowerCase();
 
@@ -103,7 +104,74 @@ function getAttributionType(value) {
   raiseError(`Invalid attribution type: ${value}`);
 }
 
+function getSiteSlug(site) {
+  // The input can be the site slug or the branch language code.
+
+  switch (site.toLowerCase()) {
+    // SCP
+    case 'en':
+    case 'scp-wiki':
+      return 'scp-wiki';
+    case 'ru':
+    case 'scp-ru':
+      return 'scp-ru';
+    case 'ko':
+    case 'scpko':
+      return 'scpko';
+    case 'cn':
+    case 'scp-wiki-cn':
+      return 'scp-wiki-cn';
+    case 'fr':
+    case 'fondationscp':
+      return 'fondationscp';
+    case 'pl':
+    case 'scp-pl':
+      return 'scp-pl';
+    case 'es':
+    case 'lafundacionscp':
+      return 'lafundacionscp';
+    case 'th':
+    case 'scp-th':
+      return 'scp-th';
+    case 'jp':
+    case 'scp-jp':
+      return 'scp-jp';
+    case 'de':
+    case 'scp-wiki-de':
+      return 'scp-wiki-de';
+    case 'it':
+    case 'fondazionescp':
+      return 'fondazionescp';
+    case 'uk':
+    case 'scp-ukrainian':
+      return 'scp-ukrainian';
+    case 'pt':
+    case 'pt-br':
+    case 'scp-pt-br':
+      return 'scp-pt-br';
+    case 'cs':
+    case 'scp-cs':
+      return 'scp-cs';
+    case 'zh':
+    case 'zh-tr':
+      return 'scp-zh-tr';
+    case 'vn':
+    case 'scp-vn':
+      return 'scp-vn';
+
+    // Wanderer's Library
+    case 'wl':
+    case 'wl-en':
+      return 'wanderers-library';
+
+    // Unknown or typo
+    default:
+      raiseError(`Unknown site: ${site}`, 'Pass in a site slug or INT language code.');
+  }
+}
+
 // Initialization
+
 function initializeMessages(language) {
 }
 
@@ -114,7 +182,7 @@ function setup() {
   const url = new URL(window.location.href);
   const parameters = new URLSearchParams(url.search);
   const language = parameters.get('lang');
-  const styling = parameters.get('style');
+  const site = parameters.get('site');
 
   if (!language) {
     setError('No language set', 'Parameter is "lang". Use "en" for English.');
