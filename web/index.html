@@ -14,6 +14,69 @@
 
     <h1 id="error" class="hidden"></h1>
 
-    <div></div>
+    <div id="form">
+      <fieldset id="auth">
+        <legend id="auth-label"></legend>
+
+        <!-- Password -->
+        <span>
+          <label id="auth-password-label"></label>
+          <input id="auth-password" type="text"></input>
+        </span>
+      </fieldset>
+
+      <fieldset id="attrib">
+        <legend id="attrib-label"></legend>
+
+        <!-- Site -->
+        <span>
+          <label id="attrib-site-label"></label>
+          <input id="attrib-site" type="text"></input>
+        </span>
+
+        <!-- Page -->
+        <span>
+          <label id="attrib-page-label"></label>
+          <input id="attrib-page" type="text"></input>
+        </span>
+
+        <!-- Attribution -->
+        <!-- TODO -->
+      </fieldset>
+
+      <fieldset id="admin">
+        <legend id="admin-label"></legend>
+
+        <!-- Reset Password -->
+        <span>
+          <label id="admin-password-label"></label>
+          <input id="admin-password" type="text"></input>
+        </span>
+
+        <div>
+          <span>
+            <input id="admin-radio-regular" type="radio" name="timer-type" value="generic" checked>
+            <label id="admin-radio-regular-label" for="timer-type"></label>
+          </span>
+
+          <span>
+            <input id="admin-radio-admin" type="radio" name="timer-type" value="generic">
+            <label id="admin-radio-admin-label" for="timer-type"></label>
+          </span>
+        </div>
+
+        <!-- Old password -->
+        <span>
+          <label id="admin-oldpassword-label"></label>
+          <input id="admin-oldpassword" type="text"></input>
+        </span>
+
+        <!-- New password -->
+        <span>
+          <label id="admin-newpassword-label"></label>
+          <input id="admin-newpassword" type="text"></input>
+        </span>
+      </fieldset>
+    </div>
   </body>
 </html>
