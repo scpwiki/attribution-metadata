@@ -35,7 +35,9 @@ const TRANSLATIONS = {
     'auth-password': 'Password',
     'attrib-label': 'Attribution',
     'site-label': 'Site',
+    'site-placeholder': 'scp-jp',
     'page-label': 'Page',
+    'page-placeholder': 'scp-001',
     'admin-label': 'Administration',
     'admin-password': 'Admin Password',
     'password-type-regular': 'Regular',
@@ -262,12 +264,18 @@ function initializeMessages() {
     document.getElementById(id).innerText = getMessage(messageKey || id);
   }
 
+  function setPlaceholder(id, messageKey) {
+    document.getElementById(id).placeholder = getMessage(messageKey);
+  }
+
   document.title = getMessage('title');
   setMessage('auth-label');
   setMessage('auth-password-label', 'auth-password');
   setMessage('main-label', 'attrib-label');
   setMessage('main-site-label', 'site-label');
+  setPlaceholder('main-site', 'site-placeholder');
   setMessage('main-page-label', 'page-label');
+  setPlaceholder('main-page', 'page-placeholder');
   setMessage('admin-label');
   setMessage('admin-password-label', 'admin-password');
   setMessage('admin-radio-regular-label', 'password-type-regular');
