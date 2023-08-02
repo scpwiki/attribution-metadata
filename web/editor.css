@@ -7,6 +7,10 @@ fieldset {
   margin: 0.2em;
 }
 
+fieldset .row:not(:last-child) {
+  margin-bottom: 0.2em;
+}
+
 /* Basic utility classes */
 .hidden {
   display: none;
@@ -14,6 +18,9 @@ fieldset {
 
 #error {
   text-align: center;
+}
+
+.error {
   color: #b01;
 }
 

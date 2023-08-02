@@ -12,38 +12,39 @@
   <body>
     <noscript>This application requires Javascript to function.</noscript>
 
-    <h1 id="error" class="hidden"></h1>
+    <h1 id="error" class="error hidden"></h1>
 
     <div id="form">
       <fieldset id="auth">
         <legend id="auth-label"></legend>
 
         <!-- Password -->
-        <span>
+        <div class="row">
           <label id="auth-password-label"></label>
           <input id="auth-password" type="text"></input>
-        </span>
+          <label id="auth-password-error" class="error"></label>
+        </div>
       </fieldset>
 
       <fieldset id="main">
         <legend id="main-label"></legend>
 
         <!-- Site -->
-        <span>
+        <div class="row">
           <label id="main-site-label"></label>
           <input id="main-site" type="text"></input>
-        </span>
+          <label id="main-site-error" class="error"></label>
+        </div>
 
         <!-- Page -->
-        <span>
+        <div class="row">
           <label id="main-page-label"></label>
           <input id="main-page" type="text"></input>
-        </span>
+          <label id="main-page-error" class="error"></label>
+        </div>
 
         <!-- Attribution -->
-        <fieldset id="attrib">
-          <!-- TODO -->
-        </fieldset>
+        <!-- TODO -->
       </fieldset>
 
       <fieldset id="admin">
@@ -53,6 +54,7 @@
         <span>
           <label id="admin-password-label"></label>
           <input id="admin-password" type="text"></input>
+          <label id="admin-password-error" class="error"></label>
         </span>
 
         <div>
@@ -71,12 +73,14 @@
         <span>
           <label id="admin-oldpassword-label"></label>
           <input id="admin-oldpassword" type="text"></input>
+          <label id="admin-oldpassword-error" class="error"></label>
         </span>
 
         <!-- New password -->
         <span>
           <label id="admin-newpassword-label"></label>
           <input id="admin-newpassword" type="text"></input>
+          <label id="admin-newpassword-error" class="error"></label>
         </span>
       </fieldset>
     </div>

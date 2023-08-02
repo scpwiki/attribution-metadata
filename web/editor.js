@@ -21,9 +21,14 @@ const TRANSLATIONS = {
   // English
   en: {
     'title': 'Attribution Metadata Editor',
+    'auth-label': 'Authentication',
+    'auth-password': 'Password',
+    'attrib-label': 'Attribution',
+    'site-label': 'Site',
+    'page-label': 'Page',
+    'admin-label': 'Administration',
     'error-site': 'Unknown site: ',
     'error-site-secondary': 'Pass in a site slug or INT language code.',
-    // TODO
   },
 };
 
@@ -192,6 +197,13 @@ function initializeMessages(language) {
   }
 
   document.title = getMessage(language, 'title');
+  setMessage('auth-label');
+  setMessage('auth-password-label', 'auth-password');
+  setMessage('main-label', 'attrib-label');
+  setMessage('main-site-label', 'site-label');
+  setMessage('main-page-label', 'page-label');
+  setMessage('attrib-label');
+  setMessage('admin-label');
 
   // TODO
 }
@@ -211,7 +223,10 @@ function setup() {
     return;
   }
 
-  initializeSite(language, site);
+  if (site) {
+    initializeSite(language, site);
+  }
+
   initializeMessages(language);
   initializeHooks(language);
 }
