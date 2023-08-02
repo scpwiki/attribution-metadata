@@ -74,6 +74,20 @@ function getMessage(messageKey) {
 // Crom
 
 const CROM_ENDPOINT = 'https://api.crom.avn.sh/graphql';
+const CROM_PAGE_QUERY = `
+{
+  page(url: $url) {
+    wikidotInfo {
+      title,
+      rating,
+      createdAt,
+      createdBy {
+        wikidotInfo { displayName }
+      }
+    }
+  }
+}
+`;
 const CROM_USER_QUERY = `
 {
   user(name: $user) {
@@ -85,8 +99,7 @@ const CROM_USER_QUERY = `
 }
 `;
 
-async function getUserInfo(name) {
-  const query = CROM_USER_QUERY.replace('$user', JSON.stringify(name));
+async function queryCrom(query) {
   const request = new Request(CROM_ENDPOINT, {
     keepalive: true,
     method: 'POST',
@@ -99,7 +112,30 @@ async function getUserInfo(name) {
   });
 
   const response = await fetch(request);
-  const { data: { user: { wikidotInfo } } } = await response.json();
+  const { data } = await response.json();
+  return data;
+}
+
+async function getPageInfo(site, page) {
+  const url = `http://${site}.wikidot.com/${page}`;
+  const query = CROM_PAGE_QUERY.replace('$url', JSON.stringify(url));
+  const { page: { wikidotInfo } } = await queryCrom(query);
+  if (wikidotInfo === null) {
+    return null;
+  }
+
+  const { title, rating, createdAt, createdBy: { wikidotInfo: { displayName } } } = wikidotInfo;
+  return {
+    title,
+    score: rating,
+    createdAt: new Date(createdAt),
+    createdBy: displayName,
+  };
+}
+
+async function getUserInfo(name) {
+  const query = CROM_USER_QUERY.replace('$user', JSON.stringify(name));
+  const { user: { wikidotInfo } } = await queryCrom(query);
 
   if (wikidotInfo === null) {
     return { name: null, id: null };
