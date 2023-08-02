@@ -12,6 +12,10 @@ fieldset .row:not(:last-child) {
 }
 
 /* Basic utility classes */
+.margin-top {
+  margin-top: 0.2em;
+}
+
 .hidden {
   display: none;
 }

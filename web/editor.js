@@ -16,6 +16,10 @@ function fatalError(primary, secondary = null) {
   throw new Error(primary);
 }
 
+function setError(id, message = '') {
+  document.getElementById(id).innerText = message;
+}
+
 // Localization
 const TRANSLATIONS = {
   // English
@@ -27,8 +31,13 @@ const TRANSLATIONS = {
     'site-label': 'Site',
     'page-label': 'Page',
     'admin-label': 'Administration',
+    'admin-password': 'Admin Password',
+    'password-type-regular': 'Regular',
+    'password-type-admin': 'Admin',
+    'old-password': 'Old Password',
+    'new-password': 'New Password',
     'error-site': 'Unknown site: ',
-    'error-site-secondary': 'Pass in a site slug or INT language code.',
+    'error-site-secondary': 'Pass in a site slug or INT language code',
   },
 };
 
@@ -202,10 +211,12 @@ function initializeMessages(language) {
   setMessage('main-label', 'attrib-label');
   setMessage('main-site-label', 'site-label');
   setMessage('main-page-label', 'page-label');
-  setMessage('attrib-label');
   setMessage('admin-label');
-
-  // TODO
+  setMessage('admin-password-label', 'admin-password');
+  setMessage('admin-radio-regular-label', 'password-type-regular');
+  setMessage('admin-radio-admin-label', 'password-type-admin');
+  setMessage('admin-oldpassword-label', 'old-password');
+  setMessage('admin-newpassword-label', 'new-password');
 }
 
 function initializeHooks(language) {
