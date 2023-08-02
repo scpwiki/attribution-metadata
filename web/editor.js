@@ -176,11 +176,8 @@ async function queryAttrib(method, route, data = null) {
     },
     body,
   });
-  console.log(request);
 
-  const response = await fetch(request);
-  console.log(response);
-  return response;
+  return fetch(request);
 }
 
 async function checkPassword(type, value) {
