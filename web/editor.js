@@ -48,6 +48,7 @@ const TRANSLATIONS = {
     'error-site': 'Invalid site',
     'error-site-fatal': 'Unknown site: ',
     'error-site-fatal-secondary': 'Pass in a site slug or INT language code',
+    'info-source': 'source',
   },
 };
 
@@ -318,6 +319,7 @@ function initializeMessages() {
   setMessage('admin-radio-admin-label', 'password-type-admin');
   setMessage('admin-oldpassword-label', 'old-password');
   setMessage('admin-newpassword-label', 'new-password');
+  setMessage('info-source');
 }
 
 function initializeHooks() {
