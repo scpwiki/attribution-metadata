@@ -61,6 +61,12 @@ pub async fn check_password(
     password: &str,
     password_type: PasswordType,
 ) -> Result<bool, Error> {
+    // Short-circuits
+    if site_slug.is_empty() || password.is_empty() {
+        return Ok(false);
+    }
+
+    // Make request
     let field = password_type.field_name();
     let result = dynamo
         .get_item()
