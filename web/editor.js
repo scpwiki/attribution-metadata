@@ -117,9 +117,9 @@ async function queryCrom(query) {
     keepalive: true,
     method: 'POST',
     headers: {
-      'Accept-Encoding': 'gzip, deflate, br',
       'Content-Type': 'application/json',
       'Accept': 'application/json',
+      'Accept-Encoding': 'gzip, deflate, br',
     },
     body: JSON.stringify({ query }),
   });
