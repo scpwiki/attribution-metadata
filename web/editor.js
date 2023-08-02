@@ -165,7 +165,7 @@ async function getUserInfo(name) {
 const ATTRIB_ENDPOINT = 'https://tptm7stb3j3onds27seddf2izq0mcesv.lambda-url.us-east-2.on.aws';
 
 async function queryAttrib(method, route, data = null) {
-  const body = data ? undefined : JSON.stringify(data);
+  const body = data ? JSON.stringify(data) : undefined;
   const request = new Request(ATTRIB_ENDPOINT + route, {
     keepalive: true,
     method,
