@@ -208,7 +208,7 @@ function getPageAttribution(site, page) {
 }
 
 async function setPageAttribution(site, page, pasword, attributions) {
-  await queryAttrib('PUT', '/attribution/page', { site, page, password, attributions)
+  await queryAttrib('PUT', '/attribution/page', { site, page, password, attributions });
 }
 
 // Handlers
