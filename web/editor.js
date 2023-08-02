@@ -283,7 +283,7 @@ function initializeHooks() {
   element.addEventListener('input', debounce(mainPasswordCheck, 500));
 
   element = document.getElementById('main-site');
-  element.addEventListener('input', siteCheck);
+  element.addEventListener('input', debounce(siteCheck, 500));
 
   element = document.getElementById('admin-password');
   element.addEventListener('input', debounce(adminPasswordCheck, 500));
