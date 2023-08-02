@@ -249,21 +249,13 @@ function siteCheck(event) {
   }
 }
 
-async function fetchPage(event) {
-  const siteSlug = document.getElementById('main-site').value;
-  const pageSlug = document.getElementById('main-page').value;
-  let pageInfo;
-  if (siteSlug && pageSlug) {
-    pageInfo = await getPageInfo(siteSlug, pageSlug);
-  }
+async function fetchPageCrom(siteSlug, pageSlug) {
+  const pageInfo = await getPageInfo(siteSlug, pageSlug);
 
   const element = document.getElementById('main-status');
   deleteChildren(element);
 
-  if (pageInfo === undefined) {
-    element.classList = ['error'];
-    element.innerText = getMessage('page-parameters-missing');
-  } else if (pageInfo === null) {
+  if (pageInfo === null) {
     element.classList = ['error'];
     element.innerText = getMessage('page-missing');
   } else {
@@ -297,8 +289,26 @@ async function fetchPage(event) {
 
     element.appendChild(info);
   }
+}
 
-  // TODO add attribution data
+async function fetchPageAttrib() {
+  // TODO
+}
+
+async function fetchPage(event) {
+  const siteSlug = document.getElementById('main-site').value;
+  const pageSlug = document.getElementById('main-page').value;
+  if (!siteSlug && !pageSlug) {
+    const element = document.getElementById('main-status');
+    element.classList = ['error'];
+    element.innerText = getMessage('page-parameters-missing');
+    return;
+  }
+
+  await Promise.all([
+    fetchPageCrom(),
+    fetchPageAttrib(),
+  ]);
 }
 
 // Utilities
