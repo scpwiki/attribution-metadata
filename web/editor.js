@@ -185,6 +185,16 @@ async function checkPassword(type, site, password) {
   await queryAttrib('PUT', '/password/check', { site, password, type });
 }
 
+async function updatePassword(type, site, adminPassword, oldPassword, newPassword) {
+  await queryAttrib('PUT', '/password/update', {
+    site,
+    type,
+    admin_password: adminPassword,
+    old_password: oldPassword,
+    new_password: newPassword,
+  });
+}
+
 // Handlers
 
 function buildPasswordCheck(type, id) {
