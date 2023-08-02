@@ -188,6 +188,7 @@ async function checkPassword(type, site, password) {
 // Handlers
 
 function buildPasswordCheck(type, id) {
+  const element = document.getElementById(id);
   return async function check(event) {
     // Check password in API, or clear error if input is empty.
     let valid;
@@ -195,7 +196,7 @@ function buildPasswordCheck(type, id) {
       const site = document.getElementById('main-site').value;
       if (!site) {
         // Need to pass in a site
-        document.getElementById(id).innerText = getMessage('error-password-site');
+        element.innerText = getMessage('error-password-site');
         return;
       }
 
@@ -205,7 +206,7 @@ function buildPasswordCheck(type, id) {
     }
 
     const message = valid ? '' : getMessage('error-password');
-    document.getElementById(id).innerText = message;
+    element.innerText = message;
   };
 }
 
