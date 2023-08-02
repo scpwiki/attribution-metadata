@@ -20,6 +20,7 @@ function raiseError(primary, secondary = null) {
 const TRANSLATIONS = {
   // English
   en: {
+    'title': 'Attribution Metadata Editor',
     'error-site': 'Unknown site: ',
     'error-site-secondary': 'Pass in a site slug or INT language code.',
     // TODO
@@ -189,6 +190,8 @@ function initializeMessages(language) {
   function setMessage(id, messageKey = null) {
     document.getElementById(id).innerText = getMessage(language, messageKey || id);
   }
+
+  document.title = getMessage(language, 'title');
 
   // TODO
 }
