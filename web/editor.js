@@ -164,8 +164,32 @@ async function getUserInfo(name) {
 const ATTRIB_ENDPOINT = 'https://tptm7stb3j3onds27seddf2izq0mcesv.lambda-url.us-east-2.on.aws';
 // TODO
 
+async function queryAttrib(method, route, data = null) {
+  const body = data ? undefined : JSON.stringify(data);
+  const request = new Request(ATTRIB_ENDPOINT + route, {
+    keepalive: true,
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Accept-Encoding': 'gzip, deflate, br',
+    },
+    body,
+  });
+  console.log(request);
+
+  const response = await fetch(request);
+  console.log(response);
+  return response;
+}
+
 async function checkPassword(type, value) {
-  // TODO
+  const site = document.getElementById('main-site').value;
+  await queryAttrib('PUT', '/password/check', {
+    site_slug: site,
+    password: value,
+    password_tyhpe: type,
+  });
 }
 
 // Handlers
