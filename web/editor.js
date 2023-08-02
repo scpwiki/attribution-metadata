@@ -189,7 +189,7 @@ async function checkPassword(type, password) {
 
 function buildPasswordCheck(type, id) {
   return async function check(event) {
-    // Check password in API, or clear error if empty
+    // Check password in API, or clear error if input is empty.
     let valid;
     if (event.target.value) {
       valid = await checkPassword(type, event.target.value);
