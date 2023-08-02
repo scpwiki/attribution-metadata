@@ -1,5 +1,5 @@
 // Error handling
-function raiseError(primary, secondary = null) {
+function fatalError(primary, secondary = null) {
   document.getElementById('form').classList.add('hidden');
 
   const element = document.getElementById('error');
@@ -41,12 +41,12 @@ function getMessage(language, messageKey) {
 
   const messages = TRANSLATIONS[language];
   if (!messages) {
-    raiseError(`No translations for language: ${language}`);
+    fatalError(`No translations for language: ${language}`);
   }
 
   const message = messages[messageKey];
   if (!message) {
-    raiseError(`No such message key: ${messageKey}`);
+    fatalError(`No such message key: ${messageKey}`);
   }
 
   return message;
@@ -113,7 +113,7 @@ function getAttributionType(value) {
     }
   }
 
-  raiseError(`Invalid attribution type: ${value}`);
+  fatalError(`Invalid attribution type: ${value}`);
 }
 
 function getSiteSlug(language, site) {
@@ -178,7 +178,7 @@ function getSiteSlug(language, site) {
 
     // Unknown or typo
     default:
-      raiseError(
+      fatalError(
         getMessage(language, 'error-site') + site,
         getMessage(language, 'error-site-secondary'),
       );
@@ -219,7 +219,7 @@ function setup() {
   const site = parameters.get('site');
 
   if (!language) {
-    raiseError('No language set', 'Parameter is "lang". Use "en" for English.');
+    fatalError('No language set', 'Parameter is "lang". Use "en" for English.');
     return;
   }
 
