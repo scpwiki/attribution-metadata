@@ -38,12 +38,20 @@ const TRANSLATIONS = {
     'site-placeholder': 'scp-jp',
     'page-label': 'Page',
     'page-placeholder': 'scp-001',
+    'page-info-wikidot': 'Wikidot page ',
+    'page-info-comma': ', ',
+    'page-info-period': '.',
+    'page-info-created-by': 'created by ',
+    'page-info-created-by-unknown': 'Unknown',
+    'page-missing': 'Page not found in Crom',
+    'page-fetch': 'Fetch',
     'attribution-author': 'Author',
     'attribution-rewrite': 'Rewrite',
     'attribution-translator': 'Translator',
     'attribution-maintainer': 'Maintainer',
     'admin-label': 'Administration',
     'admin-password': 'Admin Password',
+    'admin-change-password': 'Change password',
     'password-type-regular': 'Regular',
     'password-type-admin': 'Admin',
     'old-password': 'Old Password',
@@ -131,6 +139,7 @@ async function getPageInfo(site, page) {
 
   const { title, rating, createdAt, createdBy: { wikidotInfo: { displayName } } } = wikidotInfo;
   return {
+    url,
     title,
     score: rating,
     createdAt: new Date(createdAt),
@@ -187,6 +196,48 @@ function siteCheck(event) {
 
   if (site !== null) {
     event.target.value = site;
+  }
+}
+
+async function fetchPage(event) {
+  const siteSlug = document.getElementById('main-site').value;
+  const pageSlug = document.getElementById('main-page').value;
+  const pageInfo = await getPageInfo(siteSlug, pageSlug);
+
+  const element = document.getElementById('main-status');
+  deleteChildren(element);
+
+  if (pageInfo === null) {
+    element.classList = ['error'];
+    element.innerText = getMessage('page-missing');
+  } else {
+    const info = document.createElement('span');
+    const link = document.createElement('a');
+    link.href = pageInfo.url;
+    link.innerText = pageInfo.title;
+
+    function textNode(text) {
+      return document.createTextNode(text);
+    }
+    function message(messageKey) {
+      return textNode(getMessage(messageKey));
+    }
+
+    info.appendChild(message('page-info-wikidot'));
+    info.appendChild(link);
+    info.appendChild(textNode(' '));
+
+    const score = pageInfo.score >= 0 ? `(+${pageInfo.score})` : `(${pageInfo.score})`;
+    info.appendChild(textNode(score));
+
+    info.appendChild(message('page-info-comma'));
+    info.appendChild(message('page-info-created-by'));
+    info.appendChild(textNode(pageInfo.createdBy || getMessage('page-info-created-by-unknown')));
+    info.appendChild(message('page-info-comma'));
+    info.appendChild(textNode(renderDate(pageInfo.createdAt)));
+    info.appendChild(message('page-info-period'));
+
+    element.appendChild(info);
   }
 }
 
@@ -350,12 +401,14 @@ function initializeMessages() {
   setPlaceholder('main-site', 'site-placeholder');
   setMessage('main-page-label', 'page-label');
   setPlaceholder('main-page', 'page-placeholder');
+  setMessage('main-fetch', 'page-fetch');
   setMessage('admin-label');
   setMessage('admin-password-label', 'admin-password');
   setMessage('admin-radio-regular-label', 'password-type-regular');
   setMessage('admin-radio-admin-label', 'password-type-admin');
   setMessage('admin-oldpassword-label', 'old-password');
   setMessage('admin-newpassword-label', 'new-password');
+  setMessage('admin-change-password');
   setMessage('info-source');
 }
 
@@ -368,8 +421,12 @@ function initializeHooks() {
   element = document.getElementById('main-site');
   element.addEventListener('input', debounce(siteCheck, 500));
 
+  element = document.getElementById('main-fetch');
+  element.addEventListener('click', fetchPage);
+
   element = document.getElementById('admin-password');
   element.addEventListener('input', debounce(adminPasswordCheck, 500));
+
   // TODO
 }
 
