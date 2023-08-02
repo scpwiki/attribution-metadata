@@ -165,7 +165,7 @@ async function getUserInfo(name) {
 
 const ATTRIB_ENDPOINT = 'https://tptm7stb3j3onds27seddf2izq0mcesv.lambda-url.us-east-2.on.aws';
 
-async function queryAttrib(method, route, data = null) {
+function queryAttrib(method, route, data = null) {
   let body = undefined;
   if (method === 'HEAD' || method === 'GET') {
     if (data) {
@@ -201,6 +201,10 @@ async function updatePassword(type, site, adminPassword, oldPassword, newPasswor
     old_password: oldPassword,
     new_password: newPassword,
   });
+}
+
+function getPageAttribution(site, page) {
+  return queryAttrib('GET', '/attribution/page', { site, page });
 }
 
 // Handlers
