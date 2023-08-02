@@ -240,6 +240,8 @@ async function fetchPage(event) {
 
     element.appendChild(info);
   }
+
+  // TODO add attribution data
 }
 
 // Utilities
