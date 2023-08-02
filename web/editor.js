@@ -43,6 +43,7 @@ const TRANSLATIONS = {
     'page-info-period': '.',
     'page-info-created-by': 'created by ',
     'page-info-created-by-unknown': 'Unknown',
+    'page-parameters-missing': 'Both site and page must be specified',
     'page-missing': 'Page not found in Crom',
     'page-fetch': 'Fetch',
     'attribution-author': 'Author',
@@ -223,15 +224,22 @@ function siteCheck(event) {
 async function fetchPage(event) {
   const siteSlug = document.getElementById('main-site').value;
   const pageSlug = document.getElementById('main-page').value;
-  const pageInfo = await getPageInfo(siteSlug, pageSlug);
+  let pageInfo;
+  if (siteSlug && pageSlug) {
+    pageInfo = await getPageInfo(siteSlug, pageSlug);
+  }
 
   const element = document.getElementById('main-status');
   deleteChildren(element);
 
-  if (pageInfo === null) {
+  if (pageInfo === undefined) {
+    element.classList = ['error'];
+    element.innerText = getMessage('page-parameters-missing');
+  } else if (pageInfo === null) {
     element.classList = ['error'];
     element.innerText = getMessage('page-missing');
   } else {
+    element.classList = [];
     const info = document.createElement('span');
     const link = document.createElement('a');
     link.href = pageInfo.url;
