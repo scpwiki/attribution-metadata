@@ -58,6 +58,7 @@ const TRANSLATIONS = {
     'old-password': 'Old Password',
     'new-password': 'New Password',
     'error-password': 'Invalid password',
+    'error-password-site': 'Need site to check password',
     'error-site': 'Invalid site',
     'error-site-fatal': 'Unknown site: ',
     'error-site-fatal-secondary': 'Pass in a site slug or INT language code',
@@ -180,8 +181,7 @@ async function queryAttrib(method, route, data = null) {
   return fetch(request);
 }
 
-async function checkPassword(type, password) {
-  const site = document.getElementById('main-site').value;
+async function checkPassword(type, site, password) {
   await queryAttrib('PUT', '/password/check', { site, password, type });
 }
 
@@ -192,7 +192,14 @@ function buildPasswordCheck(type, id) {
     // Check password in API, or clear error if input is empty.
     let valid;
     if (event.target.value) {
-      valid = await checkPassword(type, event.target.value);
+      const site = document.getElementById('main-site').value;
+      if (!site) {
+        // Need to pass in a site
+        document.getElementById(id).innerText = getMessage('error-password-site');
+        return;
+      }
+
+      valid = await checkPassword(type, site, event.target.value);
     } else {
       valid = true;
     }
