@@ -11,6 +11,10 @@ fieldset .row:not(:last-child) {
   margin-bottom: 0.2em;
 }
 
+label.error {
+  margin-left: 0.2em;
+}
+
 /* Basic utility classes */
 .margin-top {
   margin-top: 0.2em;

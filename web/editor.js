@@ -42,8 +42,10 @@ const TRANSLATIONS = {
     'password-type-admin': 'Admin',
     'old-password': 'Old Password',
     'new-password': 'New Password',
-    'error-site': 'Unknown site: ',
-    'error-site-secondary': 'Pass in a site slug or INT language code',
+    'error-password': 'Invalid password',
+    'error-site': 'Invalid site',
+    'error-site-fatal': 'Unknown site: ',
+    'error-site-fatal-secondary': 'Pass in a site slug or INT language code',
   },
 };
 
@@ -109,6 +111,41 @@ async function getUserInfo(name) {
 
 const ATTRIB_ENDPOINT = 'https://tptm7stb3j3onds27seddf2izq0mcesv.lambda-url.us-east-2.on.aws';
 // TODO
+
+async function checkPassword(type, value) {
+  // TODO
+}
+
+// Handlers
+
+function buildPasswordCheck(type, id) {
+  return async function check(event) {
+    // Check password in API, or clear error if empty
+    let valid;
+    if (event.target.value) {
+      valid = await checkPassword(type, event.target.value);
+    } else {
+      valid = true;
+    }
+
+    const message = valid ? '' : getMessage('error-password');
+    document.getElementById(id).innerText = message;
+  };
+}
+
+const mainPasswordCheck = buildPasswordCheck('regular', 'auth-password-error');
+const adminPasswordCheck = buildPasswordCheck('admin', 'admin-password-error');
+
+function siteCheck(event) {
+  const site = getSiteSlug(event.target.value);
+  const valid = (site !== null);
+  const message = valid ? '' : getMessage('error-site');
+  document.getElementById('main-site-error').innerText = message;
+
+  if (site !== null) {
+    event.target.value = site;
+  }
+}
 
 // Utilities
 
@@ -193,10 +230,7 @@ function getSiteSlug(site) {
 
     // Unknown or typo
     default:
-      fatalError(
-        getMessage('error-site') + site,
-        getMessage('error-site-secondary'),
-      );
+      return null;
   }
 }
 
@@ -212,7 +246,15 @@ function debounce(func, wait) {
 // Initialization
 
 function initializeSite(site) {
-  document.getElementById('main-site').value = getSiteSlug(site);
+  site = getSiteSlug(site);
+  if (site === null) {
+    fatalError(
+      getMessage('error-site-fatal') + site,
+      getMessage('error-site-fatal-secondary'),
+    );
+  }
+
+  document.getElementById('main-site').value = site;
 }
 
 function initializeMessages() {
@@ -234,7 +276,17 @@ function initializeMessages() {
   setMessage('admin-newpassword-label', 'new-password');
 }
 
-function initializeHooks(language) {
+function initializeHooks() {
+  let element;
+
+  element = document.getElementById('auth-password');
+  element.addEventListener('input', debounce(mainPasswordCheck, 500));
+
+  element = document.getElementById('main-site');
+  element.addEventListener('input', siteCheck);
+
+  element = document.getElementById('admin-password');
+  element.addEventListener('input', debounce(adminPasswordCheck, 500));
   // TODO
 }
 
