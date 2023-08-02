@@ -1,5 +1,7 @@
 // Error handling
 function raiseError(primary, secondary = null) {
+  document.getElementById('form').classList.add('hidden');
+
   const element = document.getElementById('error');
   element.classList.remove('hidden');
   element.innerText = primary;
@@ -7,6 +9,7 @@ function raiseError(primary, secondary = null) {
   if (secondary) {
     const element2 = document.createElement('div');
     element2.classList = ['error-secondary'];
+    element2.innerText = secondary;
     element.appendChild(element2);
   }
 
@@ -201,7 +204,7 @@ function setup() {
   const site = parameters.get('site');
 
   if (!language) {
-    setError('No language set', 'Parameter is "lang". Use "en" for English.');
+    raiseError('No language set', 'Parameter is "lang". Use "en" for English.');
     return;
   }
 
