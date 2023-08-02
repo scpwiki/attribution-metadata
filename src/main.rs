@@ -41,7 +41,7 @@ use self::handlers::*;
 use lambda_http::{
     self, http::Method, service_fn, tower::ServiceBuilder, Body, Error, Request, Response,
 };
-use tower_http::cors::{self, CorsLayer};
+use tower_http::cors::CorsLayer;
 
 /// Main handler for Lambda requests.
 ///
@@ -87,12 +87,8 @@ async fn main() -> Result<(), Error> {
         .without_time() // disabling time, because CloudWatch adds the ingestion time
         .init();
 
-    let cors = CorsLayer::new()
-        .allow_methods([Method::OPTIONS, Method::GET, Method::PUT])
-        .allow_origin(cors::Any);
-
     let handler = ServiceBuilder::new()
-        .layer(cors)
+        .layer(CorsLayer::permissive())
         .service(service_fn(function_handler));
 
     info!("Starting AttributionMetadataService lambda worker");
