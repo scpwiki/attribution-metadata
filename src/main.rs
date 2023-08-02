@@ -88,7 +88,7 @@ async fn main() -> Result<(), Error> {
         .init();
 
     let cors = CorsLayer::new()
-        .allow_methods([Method::GET, Method::PUT])
+        .allow_methods([Method::OPTIONS, Method::GET, Method::PUT])
         .allow_origin(cors::Any);
 
     let handler = ServiceBuilder::new()
