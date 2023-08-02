@@ -1,4 +1,9 @@
+// Globals
+
+let language;
+
 // Error handling
+
 function fatalError(primary, secondary = null) {
   document.getElementById('form').classList.add('hidden');
 
@@ -21,6 +26,7 @@ function setError(id, message = '') {
 }
 
 // Localization
+
 const TRANSLATIONS = {
   // English
   en: {
@@ -41,7 +47,7 @@ const TRANSLATIONS = {
   },
 };
 
-function getMessage(language, messageKey) {
+function getMessage(messageKey) {
   // Special case:
   // The 'test' language just echoes the message key back out.
   if (language === 'test') {
@@ -125,7 +131,7 @@ function getAttributionType(value) {
   fatalError(`Invalid attribution type: ${value}`);
 }
 
-function getSiteSlug(language, site) {
+function getSiteSlug(site) {
   // The input can be the site slug or the branch language code.
 
   switch (site.toLowerCase()) {
@@ -188,8 +194,8 @@ function getSiteSlug(language, site) {
     // Unknown or typo
     default:
       fatalError(
-        getMessage(language, 'error-site') + site,
-        getMessage(language, 'error-site-secondary'),
+        getMessage('error-site') + site,
+        getMessage('error-site-secondary'),
       );
   }
 }
@@ -205,16 +211,16 @@ function debounce(func, wait) {
 
 // Initialization
 
-function initializeSite(language, site) {
-  document.getElementById('main-site').value = getSiteSlug(language, site);
+function initializeSite(site) {
+  document.getElementById('main-site').value = getSiteSlug(site);
 }
 
-function initializeMessages(language) {
+function initializeMessages() {
   function setMessage(id, messageKey = null) {
-    document.getElementById(id).innerText = getMessage(language, messageKey || id);
+    document.getElementById(id).innerText = getMessage(messageKey || id);
   }
 
-  document.title = getMessage(language, 'title');
+  document.title = getMessage('title');
   setMessage('auth-label');
   setMessage('auth-password-label', 'auth-password');
   setMessage('main-label', 'attrib-label');
@@ -235,7 +241,7 @@ function initializeHooks(language) {
 function setup() {
   const url = new URL(window.location.href);
   const parameters = new URLSearchParams(url.search);
-  const language = parameters.get('lang');
+  language = parameters.get('lang');
   const site = parameters.get('site');
 
   if (!language) {
@@ -243,12 +249,9 @@ function setup() {
     return;
   }
 
-  if (site) {
-    initializeSite(language, site);
-  }
-
-  initializeMessages(language);
-  initializeHooks(language);
+  if (site) initializeSite(site);
+  initializeMessages();
+  initializeHooks();
 }
 
 setTimeout(setup, 5);
