@@ -213,8 +213,8 @@ async function setPageAttribution(site, page, pasword, attributions) {
 
 // Handlers
 
-function buildPasswordCheck(type, id) {
-  const element = document.getElementById(id);
+function buildPasswordCheck(type, errorId) {
+  const errorElement = document.getElementById(errorId);
   return async function check(event) {
     // Check password in API, or clear error if input is empty.
     let valid = true;
@@ -222,7 +222,7 @@ function buildPasswordCheck(type, id) {
       const site = document.getElementById('main-site').value;
       if (!site) {
         // Need to pass in a site
-        element.innerText = getMessage('error-password-site');
+        errorElement.innerText = getMessage('error-password-site');
         return;
       }
 
@@ -230,7 +230,7 @@ function buildPasswordCheck(type, id) {
     }
 
     const message = valid ? '' : getMessage('error-password');
-    element.innerText = message;
+    errorElement.innerText = message;
   };
 }
 
