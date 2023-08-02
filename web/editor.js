@@ -194,6 +194,15 @@ function getSiteSlug(language, site) {
   }
 }
 
+function debounce(func, wait) {
+  let timeoutId;
+
+  return function inner(...args) {
+    clearTimeout(timeout);
+    timeoutId = setTimeout(() => func(...args), wait);
+  };
+}
+
 // Initialization
 
 function initializeSite(language, site) {
