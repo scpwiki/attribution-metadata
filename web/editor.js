@@ -17,6 +17,8 @@ function raiseError(primary, secondary = null) {
 const TRANSLATIONS = {
   // English
   en: {
+    'error-site': 'Unknown site: ',
+    'error-site-secondary': 'Pass in a site slug or INT language code.',
     // TODO
   },
 };
@@ -105,7 +107,7 @@ function getAttributionType(value) {
   raiseError(`Invalid attribution type: ${value}`);
 }
 
-function getSiteSlug(site) {
+function getSiteSlug(language, site) {
   // The input can be the site slug or the branch language code.
 
   switch (site.toLowerCase()) {
@@ -167,7 +169,10 @@ function getSiteSlug(site) {
 
     // Unknown or typo
     default:
-      raiseError(`Unknown site: ${site}`, 'Pass in a site slug or INT language code.');
+      raiseError(
+        getMessage(language, 'error-site') + site,
+        getMessage(language, 'error-site-secondary'),
+      );
   }
 }
 
