@@ -163,7 +163,6 @@ async function getUserInfo(name) {
 // AttributionMetadataService
 
 const ATTRIB_ENDPOINT = 'https://tptm7stb3j3onds27seddf2izq0mcesv.lambda-url.us-east-2.on.aws';
-// TODO
 
 async function queryAttrib(method, route, data = null) {
   const body = data ? undefined : JSON.stringify(data);
