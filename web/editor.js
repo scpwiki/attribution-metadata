@@ -180,11 +180,11 @@ async function queryAttrib(method, route, data = null) {
   return fetch(request);
 }
 
-async function checkPassword(type, value) {
+async function checkPassword(type, password) {
   const site = document.getElementById('main-site').value;
   await queryAttrib('PUT', '/password/check', {
-    site_slug: site,
-    password: value,
+    site,
+    password,
     password_type: type,
   });
 }
