@@ -229,8 +229,7 @@ function buildPasswordCheck(type, errorId) {
       valid = await checkPassword(type, site, event.target.value);
     }
 
-    const message = valid ? '' : getMessage('error-password');
-    errorElement.innerText = message;
+    errorElement.innerText = valid ? '' : getMessage('error-password');
   };
 }
 
