@@ -190,7 +190,8 @@ function queryAttrib(method, route, data = null) {
 }
 
 async function checkPassword(type, site, password) {
-  await queryAttrib('PUT', '/password/check', { site, password, type });
+  const response = await queryAttrib('PUT', '/password/check', { site, password, type });
+  return response.status === 200;
 }
 
 async function updatePassword(type, site, adminPassword, oldPassword, newPassword) {
@@ -214,8 +215,9 @@ async function setPageAttribution(site, page, pasword, attributions) {
 // Handlers
 
 function buildPasswordCheck(type, errorId) {
-  const errorElement = document.getElementById(errorId);
   return async function check(event) {
+    const errorElement = document.getElementById(errorId);
+
     // Check password in API, or clear error if input is empty.
     let valid = true;
     if (event.target.value) {
