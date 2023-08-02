@@ -214,6 +214,7 @@ async function fetchPage(event) {
     const info = document.createElement('span');
     const link = document.createElement('a');
     link.href = pageInfo.url;
+    link.target = '_blank';
     link.innerText = pageInfo.title;
 
     function textNode(text) {
