@@ -41,7 +41,7 @@ const TRANSLATIONS = {
     'page-info-wikidot': 'Wikidot page ',
     'page-info-comma': ', ',
     'page-info-period': '.',
-    'page-info-created-by': 'created by user ',
+    'page-info-created-by': 'created by ',
     'page-info-created-by-unknown': 'Unknown',
     'page-missing': 'Page not found in Crom',
     'page-fetch': 'Fetch',
