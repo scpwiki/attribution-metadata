@@ -207,6 +207,10 @@ function getPageAttribution(site, page) {
   return queryAttrib('GET', '/attribution/page', { site, page });
 }
 
+async function setPageAttribution(site, page, pasword, attributions) {
+  await queryAttrib('PUT', '/attribution/page', { site, page, password, attributions)
+}
+
 // Handlers
 
 function buildPasswordCheck(type, id) {
