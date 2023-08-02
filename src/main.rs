@@ -38,9 +38,8 @@ mod build {
 }
 
 use self::handlers::*;
-use http::method::Method;
 use lambda_http::{
-    self, service_fn, tower::ServiceBuilder, Body, Error, Request, Response,
+    self, http::Method, service_fn, tower::ServiceBuilder, Body, Error, Request, Response,
 };
 use tower_http::cors::{self, CorsLayer};
 
@@ -88,7 +87,10 @@ async fn main() -> Result<(), Error> {
         .without_time() // disabling time, because CloudWatch adds the ingestion time
         .init();
 
-    let cors = CorsLayer::new().allow_origin(cors::Any);
+    let cors = CorsLayer::new()
+        .allow_methods([Method::GET, Method::PUT])
+        .allow_origin(cors::Any);
+
     let handler = ServiceBuilder::new()
         .layer(cors)
         .service(service_fn(function_handler));

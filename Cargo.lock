@@ -56,7 +56,6 @@ dependencies = [
  "aws-sdk-dynamodb",
  "built",
  "color-backtrace",
- "http",
  "lambda_http",
  "lambda_runtime",
  "maplit",
