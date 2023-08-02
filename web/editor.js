@@ -182,11 +182,7 @@ async function queryAttrib(method, route, data = null) {
 
 async function checkPassword(type, password) {
   const site = document.getElementById('main-site').value;
-  await queryAttrib('PUT', '/password/check', {
-    site,
-    password,
-    type,
-  });
+  await queryAttrib('PUT', '/password/check', { site, password, type });
 }
 
 // Handlers
