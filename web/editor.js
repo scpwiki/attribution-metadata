@@ -286,6 +286,12 @@ function debounce(func, wait) {
   };
 }
 
+function deleteChildren(element) {
+  while (element.firstChild) {
+    element.removeChild(element.lastChild);
+  }
+}
+
 // Initialization
 
 function initializeSite(site) {
