@@ -204,7 +204,7 @@ function debounce(func, wait) {
   let timeoutId;
 
   return function inner(...args) {
-    clearTimeout(timeout);
+    clearTimeout(timeoutId);
     timeoutId = setTimeout(() => func(...args), wait);
   };
 }
