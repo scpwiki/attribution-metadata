@@ -217,7 +217,7 @@ function buildPasswordCheck(type, id) {
   const element = document.getElementById(id);
   return async function check(event) {
     // Check password in API, or clear error if input is empty.
-    let valid;
+    let valid = true;
     if (event.target.value) {
       const site = document.getElementById('main-site').value;
       if (!site) {
@@ -227,8 +227,6 @@ function buildPasswordCheck(type, id) {
       }
 
       valid = await checkPassword(type, site, event.target.value);
-    } else {
-      valid = true;
     }
 
     const message = valid ? '' : getMessage('error-password');
