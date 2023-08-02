@@ -185,7 +185,7 @@ async function checkPassword(type, value) {
   await queryAttrib('PUT', '/password/check', {
     site_slug: site,
     password: value,
-    password_tyhpe: type,
+    password_type: type,
   });
 }
 
