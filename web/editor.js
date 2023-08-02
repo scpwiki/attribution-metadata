@@ -178,10 +178,20 @@ function getSiteSlug(language, site) {
 
 // Initialization
 
+function initializeSite(language, site) {
+  document.getElementById('main-site').value = getSiteSlug(language, site);
+}
+
 function initializeMessages(language) {
+  function setMessage(id, messageKey = null) {
+    document.getElementById(id).innerText = getMessage(language, messageKey || id);
+  }
+
+  // TODO
 }
 
 function initializeHooks(language) {
+  // TODO
 }
 
 function setup() {
@@ -195,6 +205,7 @@ function setup() {
     return;
   }
 
+  initializeSite(language, site);
   initializeMessages(language);
   initializeHooks(language);
 }
