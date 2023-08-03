@@ -68,6 +68,7 @@ const TRANSLATIONS = {
     'error-site': 'Invalid site',
     'error-site-fatal': 'Unknown site: ',
     'error-site-fatal-secondary': 'Pass in a site slug or INT language code',
+    'info-viewer': 'viewer',
     'info-source': 'source',
   },
 };
@@ -603,6 +604,8 @@ function initializeMessages() {
   setMessage('admin-oldpassword-label', 'old-password');
   setMessage('admin-newpassword-label', 'new-password');
   setMessage('admin-change-password');
+  setMessage('info-viewer');
+  document.getElementById('info-viewer').href = `https://scpwiki.github.io/attribution-metadata/viewer.html?lang=${language}`;
   setMessage('info-source');
 }
 
