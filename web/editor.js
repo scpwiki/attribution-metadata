@@ -311,7 +311,7 @@ async function fetchPageAttrib(siteSlug, pageSlug) {
 
   deleteChildren(element);
 
-  if (attributions.length === 0) {
+  if (attributions === null || attributions.length === 0) {
     const label = document.createElement('label');
     label.innerText = getMessage('attribution-none');
     element.appendChild(label);
