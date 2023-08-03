@@ -46,6 +46,7 @@ const TRANSLATIONS = {
     'page-parameters-missing': 'Both site and page must be specified',
     'page-missing': 'Page not found in Crom',
     'page-fetch': 'Fetch',
+    'page-save': 'Save',
     'attribution-none': 'No attributions',
     'attribution-author': 'Author',
     'attribution-rewrite': 'Rewrite',
@@ -411,6 +412,11 @@ async function fetchPageAttrib(siteSlug, pageSlug) {
   for (const attribution of attributions) {
     element.appendChild(buildAttribution(attribution));
   }
+
+  const saveButton = document.createElement('button');
+  saveButton.innerText = getMessage('page-save');
+  // TODO add handler
+  element.appendChild(saveButton);
 }
 
 async function fetchPage(event) {
