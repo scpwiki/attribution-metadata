@@ -567,11 +567,11 @@ function renderDate(date) {
 
 // Initialization
 
-function initializeSite(site) {
-  site = getSiteSlug(site);
+function initializeSite(inputSite) {
+  site = getSiteSlug(inputSite);
   if (site === null) {
     fatalError(
-      getMessage('error-site-fatal') + site,
+      getMessage('error-site-fatal') + inputSite,
       getMessage('error-site-fatal-secondary'),
     );
   }
