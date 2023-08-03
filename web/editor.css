@@ -19,6 +19,10 @@ label.error {
   margin-top: 1em;
 }
 
+.attrib-entry label {
+  margin-right: 0.2em;
+}
+
 .info {
   font-size: 0.8em;
 }
