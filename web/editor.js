@@ -46,10 +46,15 @@ const TRANSLATIONS = {
     'page-parameters-missing': 'Both site and page must be specified',
     'page-missing': 'Page not found in Crom',
     'page-fetch': 'Fetch',
+    'attribution-none': 'No attributions',
     'attribution-author': 'Author',
     'attribution-rewrite': 'Rewrite',
     'attribution-translator': 'Translator',
     'attribution-maintainer': 'Maintainer',
+    'field-attribution-type': 'Type',
+    'field-user-name': 'User name',
+    'field-user-id': 'User ID',
+    'field-date': 'Date',
     'admin-label': 'Administration',
     'admin-password': 'Admin Password',
     'admin-change-password': 'Change password',
@@ -204,8 +209,9 @@ async function updatePassword(type, site, adminPassword, oldPassword, newPasswor
   });
 }
 
-function getPageAttribution(site, page) {
-  return queryAttrib('GET', '/attribution/page', { site, page });
+async function getPageAttribution(site, page) {
+  const response = await queryAttrib('GET', '/attribution/page', { site, page });
+  return response.json();
 }
 
 async function setPageAttribution(site, page, pasword, attributions) {
@@ -291,8 +297,112 @@ async function fetchPageCrom(siteSlug, pageSlug) {
   }
 }
 
-async function fetchPageAttrib() {
-  // TODO
+async function fetchPageAttrib(siteSlug, pageSlug) {
+  const element = document.getElementById('attrib');
+  const attributions = await getPageAttribution(siteSlug, pageSlug);
+
+  deleteChildren(element);
+
+  if (attributions.length === 0) {
+    const label = document.createElement('label');
+    label.innerText = getMessage('attribution-none');
+    element.appendChild(label);
+    return;
+  }
+
+  function buildAttribution(attribution) {
+    function buildAttributionType() {
+      const container = document.createElement('div');
+
+      const label = document.createElement('label');
+      label.innerText = getMessage('field-attribution-type');
+      container.appendChild(label);
+
+      const selector = document.createElement('select');
+
+      const option1 = document.createElement('option');
+      option1.innerText = getMessage('attribution-author');
+      option1.value = 'author';
+      selector.appendChild(option1);
+
+      const option2 = document.createElement('option');
+      option2.innerText = getMessage('attribution-rewrite');
+      option2.value = 'rewrite';
+      selector.appendChild(option2);
+
+      const option3 = document.createElement('option');
+      option3.innerText = getMessage('attribution-translator');
+      option3.value = 'translator';
+      selector.appendChild(option3);
+
+      const option4 = document.createElement('option');
+      option4.innerText = getMessage('attribution-maintainer');
+      option4.value = 'maintainer';
+      selector.appendChild(option4);
+
+      container.appendChild(selector);
+      return container;
+    }
+
+    function buildUserName() {
+      const container = document.createElement('div');
+
+      const label = document.createElement('label');
+      label.innerText = getMessage('field-user-name');
+      container.appendChild(label);
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = 'Moto42';
+      container.appendChild(input);
+
+      return container;
+    }
+
+    function buildUserId() {
+      const container = document.createElement('div');
+
+      const label = document.createElement('label');
+      label.innerText = getMessage('field-user-id');
+      container.appendChild(label);
+
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.min = 1;
+      container.appendChild(input);
+
+      return container;
+    }
+
+    function buildDate() {
+      const container = document.createElement('div');
+
+      const label = document.createElement('label');
+      label.innerText = getMessage('field-date');
+      container.appendChild(label);
+
+      const date = document.createElement('input');
+      date.type = 'date';
+      container.appendChild(date);
+
+      return container;
+    }
+
+    const attribElement = document.createElement('fieldset');
+    attribElement.classList = ['attrib-entry'];
+    attribElement.appendChild(buildAttributionType());
+    attribElement.appendChild(buildUserName());
+    attribElement.appendChild(buildUserId());
+    attribElement.appendChild(buildDate());
+
+    // TODO add handlers
+
+    return attribElement;
+  }
+
+  for (const attribution of attributions) {
+    element.appendChild(buildAttribution(attribution));
+  }
 }
 
 async function fetchPage(event) {
@@ -306,8 +416,8 @@ async function fetchPage(event) {
   }
 
   await Promise.all([
-    fetchPageCrom(),
-    fetchPageAttrib(),
+    fetchPageCrom(siteSlug, pageSlug),
+    fetchPageAttrib(siteSlug, pageSlug),
   ]);
 }
 
