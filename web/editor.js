@@ -63,6 +63,8 @@ const TRANSLATIONS = {
     'password-type-admin': 'Admin',
     'old-password': 'Old Password',
     'new-password': 'New Password',
+    'confirm-password': 'Confirm Password',
+    'change-password': 'Change Password',
     'success': 'Success',
     'error-password': 'Invalid password',
     'error-password-site': 'Need site to check password',
@@ -634,9 +636,10 @@ function initializeMessages() {
   setMessage('admin-password-label', 'admin-password');
   setMessage('admin-radio-regular-label', 'password-type-regular');
   setMessage('admin-radio-admin-label', 'password-type-admin');
-  setMessage('admin-oldpassword-label', 'old-password');
-  setMessage('admin-newpassword-label', 'new-password');
-  setMessage('admin-change-password');
+  setMessage('admin-old-password-label', 'old-password');
+  setMessage('admin-new-password-label', 'new-password');
+  setMessage('admin-confirm-password-label', 'confirm-password');
+  setMessage('admin-change-password', 'change-password');
   setMessage('info-viewer');
   document.getElementById('info-viewer').href = `https://scpwiki.github.io/attribution-metadata/viewer.html?lang=${language}`;
   setMessage('info-source');
