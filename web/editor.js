@@ -341,6 +341,7 @@ async function fetchPageAttrib(siteSlug, pageSlug) {
       option4.value = 'maintainer';
       selector.appendChild(option4);
 
+      selector.value = attribution.type;
       container.appendChild(selector);
       return container;
     }
@@ -356,6 +357,7 @@ async function fetchPageAttrib(siteSlug, pageSlug) {
       const input = document.createElement('input');
       input.type = 'text';
       input.placeholder = 'Moto42';
+      input.value = attribution.user_name;
       container.appendChild(input);
 
       return container;
@@ -372,6 +374,7 @@ async function fetchPageAttrib(siteSlug, pageSlug) {
       const input = document.createElement('input');
       input.type = 'number';
       input.min = 1;
+      input.value = attribution.user_id;
       container.appendChild(input);
 
       return container;
@@ -387,6 +390,7 @@ async function fetchPageAttrib(siteSlug, pageSlug) {
 
       const date = document.createElement('input');
       date.type = 'date';
+      date.value = attribution.date;
       container.appendChild(date);
 
       return container;
