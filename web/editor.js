@@ -447,7 +447,7 @@ async function handleChangePassword(event) {
   const typeRadio = document.querySelector('input[name="password-type"]:checked');
   if (typeRadio === null) {
     // No radio button selected
-    document.getElementById().innerText = getMessage('error-pasword-type-selected'),
+    document.getElementById().innerText = getMessage('error-pasword-type-selected');
     return;
   }
   const type = typeRadio.value;
