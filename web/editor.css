@@ -40,6 +40,10 @@ label.error {
   text-align: center;
 }
 
+.success {
+  color: forestgreen;
+}
+
 .error {
   color: #b01;
 }

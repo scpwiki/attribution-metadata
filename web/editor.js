@@ -63,11 +63,16 @@ const TRANSLATIONS = {
     'password-type-admin': 'Admin',
     'old-password': 'Old Password',
     'new-password': 'New Password',
+    'success': 'Success',
     'error-password': 'Invalid password',
     'error-password-site': 'Need site to check password',
     'error-site': 'Invalid site',
     'error-site-fatal': 'Unknown site: ',
     'error-site-fatal-secondary': 'Pass in a site slug or INT language code',
+    'error-password-type-selected': 'No password type selected',
+    'error-password-mismatch': 'Passwords do not match',
+    'error-password-empty': 'Password cannot be empty',
+    'error-password-set': 'Error setting password',
     'info-viewer': 'viewer',
     'info-source': 'source',
   },
@@ -202,13 +207,14 @@ async function checkPassword(type, site, password) {
 }
 
 async function updatePassword(type, site, adminPassword, oldPassword, newPassword) {
-  await queryAttrib('PUT', '/password/update', {
+  const response = await queryAttrib('PUT', '/password/update', {
     site,
     type,
     admin_password: adminPassword,
     old_password: oldPassword,
     new_password: newPassword,
   });
+  return response.status === 200;
 }
 
 async function getPageAttribution(site, page) {
@@ -436,6 +442,60 @@ async function fetchPage(event) {
   ]);
 }
 
+async function handleChangePassword(event) {
+  const element = document.getElementById('admin-change-password-label');
+  const typeRadio = document.querySelector('input[name="password-type"]:checked');
+  if (typeRadio === null) {
+    // No radio button selected
+    document.getElementById().innerText = getMessage('error-pasword-type-selected'),
+    return;
+  }
+  const type = typeRadio.value;
+
+  const site = document.getElementById('main-site').value;
+  if (!site) {
+    // Need to pass in a site
+    element.classList = ['error'];
+    element.innerText = getMessage('error-password-site');
+    return;
+  }
+
+  const adminPassword = document.getElementById('admin-password').value;
+  const oldPassword = document.getElementById('admin-oldpassword').value;
+  const newPassword = document.getElementById('admin-newpassword').value;
+  const confirmPassword = document.getElementById('admin-confirmpassword').value;
+
+  if (!adminPassword || !oldPassword || !newPassword) {
+    // Don't attempt if any fields are empty
+    element.classList = ['error'];
+    element.innerText = getMessage('error-password-empty');
+    return;
+  }
+
+  if (newPassword !== confirmPassword) {
+    // Ensure they match
+    element.classList = ['error'];
+    element.innerText = getMessage('error-password-mismatch');
+    return;
+  }
+
+  const success = await updatePassword(type, site, adminPassword, oldPassword, newPassword);
+
+  if (success) {
+    element.classList = ['success'];
+    element.innerText = getMessage('success');
+
+    // Wipe input fields to disallow double-pressing
+    document.getElementById('admin-password').value = '';
+    document.getElementById('admin-oldpassword').value = '';
+    document.getElementById('admin-newpassword').value = '';
+    document.getElementById('admin-confirmpassword').value = '';
+  } else {
+    element.classList = ['error'];
+    element.innerText = getMessage('error-password-set');
+  }
+}
+
 // Utilities
 
 const ATTRIBUTION_TYPES = [
@@ -596,6 +656,9 @@ function initializeHooks() {
 
   element = document.getElementById('admin-password');
   element.addEventListener('input', debounce(adminPasswordCheck, 500));
+
+  element = document.getElementById('admin-change-password');
+  element.addEventListener('click', handleChangePassword);
 
   // TODO
 }

@@ -61,13 +61,13 @@
 
         <div>
           <span>
-            <input id="admin-radio-regular" type="radio" name="timer-type" value="generic" checked>
-            <label id="admin-radio-regular-label" for="timer-type"></label>
+            <input id="admin-radio-regular" type="radio" name="password-type" value="regular" checked>
+            <label id="admin-radio-regular-label" for="password-type"></label>
           </span>
 
           <span>
-            <input id="admin-radio-admin" type="radio" name="timer-type" value="generic">
-            <label id="admin-radio-admin-label" for="timer-type"></label>
+            <input id="admin-radio-admin" type="radio" name="password-type" value="admin">
+            <label id="admin-radio-admin-label" for="password-type"></label>
           </span>
         </div>
 
@@ -76,14 +76,18 @@
           <div class="row">
             <label id="admin-oldpassword-label"></label>
             <input id="admin-oldpassword" type="text"></input>
-            <label id="admin-oldpassword-error" class="error"></label>
           </div>
 
           <!-- New password -->
           <div class="row">
             <label id="admin-newpassword-label"></label>
             <input id="admin-newpassword" type="text"></input>
-            <label id="admin-newpassword-error" class="error"></label>
+          </div>
+
+          <!-- Confirm password -->
+          <div class="row">
+            <label id="admin-confirmpassword-label"></label>
+            <input id="admin-confirmpassword" type="text"></input>
           </div>
         </div>
 
