@@ -313,6 +313,7 @@ async function fetchPageAttrib(siteSlug, pageSlug) {
   function buildAttribution(attribution) {
     function buildAttributionType() {
       const container = document.createElement('div');
+      container.classList = ['row'];
 
       const label = document.createElement('label');
       label.innerText = getMessage('field-attribution-type');
@@ -346,6 +347,7 @@ async function fetchPageAttrib(siteSlug, pageSlug) {
 
     function buildUserName() {
       const container = document.createElement('div');
+      container.classList = ['row'];
 
       const label = document.createElement('label');
       label.innerText = getMessage('field-user-name');
@@ -361,6 +363,7 @@ async function fetchPageAttrib(siteSlug, pageSlug) {
 
     function buildUserId() {
       const container = document.createElement('div');
+      container.classList = ['row'];
 
       const label = document.createElement('label');
       label.innerText = getMessage('field-user-id');
@@ -376,6 +379,7 @@ async function fetchPageAttrib(siteSlug, pageSlug) {
 
     function buildDate() {
       const container = document.createElement('div');
+      container.classList = ['row'];
 
       const label = document.createElement('label');
       label.innerText = getMessage('field-date');
