@@ -601,6 +601,33 @@ function deleteChildren(element) {
   }
 }
 
+function renderDate(date) {
+  function tryRender(locale) {
+    return date.toLocaleDateString(locale, {
+      year: 'numeric',
+      day: 'numeric',
+      month: 'long',
+    });
+  }
+
+  try {
+    return tryRender(language);
+  } catch {
+    // Try navigator.languages
+  }
+
+  for (const locale of navigator.languages) {
+    try {
+      return tryRender(language);
+    } catch {
+      // Try next locale
+    }
+  }
+
+  // Everything has failed, return default render for Date.
+  return date + '';
+}
+
 // Initialization
 
 function initializeSite(inputSite) {
