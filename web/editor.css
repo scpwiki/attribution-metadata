@@ -15,12 +15,25 @@ label.error {
   margin-left: 0.2em;
 }
 
+input {
+  font-family: monospace;
+}
+
 #main-status {
   margin-top: 1em;
 }
 
+.attrib-entries {
+  display: inline-block;
+}
+
 .attrib-entry label {
   margin-right: 0.2em;
+}
+
+.attrib-input {
+  height: 8em; /* TODO depend on parent height */
+  width: 40%;
 }
 
 .info {

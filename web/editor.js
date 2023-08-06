@@ -1,6 +1,7 @@
 // Globals
 
 let language;
+let attribData;
 
 // Error handling
 
@@ -414,14 +415,30 @@ async function fetchPageAttrib(siteSlug, pageSlug) {
     attribElement.appendChild(buildUserId());
     attribElement.appendChild(buildDate());
 
-    // TODO add handlers
+    // TODO add handlers, listen on changes and update structure (attribData)
 
     return attribElement;
   }
 
+  const itemsParent = document.createElement('div');
+  itemsParent.classList = ['attrib-container'];
+
+  // List of attribution entries
+  const itemsAttrib = document.createElement('div');
+  itemsAttrib.classList = ['attrib-entries'];
   for (const attribution of attributions) {
-    element.appendChild(buildAttribution(attribution));
+    itemsAttrib.appendChild(buildAttribution(attribution));
   }
+  itemsParent.appendChild(itemsAttrib);
+
+  // Quick-edit attribution
+  const itemsInput = document.createElement('textarea');
+  itemsInput.classList = ['attrib-input'];
+  itemsInput.value = '...'; // TODO
+  itemsParent.appendChild(itemsInput);
+  // TODO add handler
+
+  element.appendChild(itemsParent);
 
   const saveButton = document.createElement('button');
   saveButton.innerText = getMessage('page-save');
