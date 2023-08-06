@@ -19,6 +19,10 @@ input {
   font-family: monospace;
 }
 
+input:invalid {
+  border: red solid 1px;
+}
+
 #main-status {
   margin-top: 1em;
 }
