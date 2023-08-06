@@ -431,7 +431,7 @@ async function fetchPageAttrib(siteSlug, pageSlug) {
 async function fetchPage(event) {
   const siteSlug = document.getElementById('main-site').value;
   const pageSlug = document.getElementById('main-page').value;
-  if (!siteSlug && !pageSlug) {
+  if (!siteSlug || !pageSlug) {
     const element = document.getElementById('main-status');
     element.classList = ['error'];
     element.innerText = getMessage('page-parameters-missing');
