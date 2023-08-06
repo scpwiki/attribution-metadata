@@ -23,7 +23,7 @@ input {
   margin-top: 1em;
 }
 
-.attrib-entries {
+#attrib-entries {
   display: inline-block;
 }
 
@@ -31,7 +31,7 @@ input {
   margin-right: 0.2em;
 }
 
-.attrib-input {
+#attrib-input {
   height: 8em; /* TODO depend on parent height */
   width: 40%;
 }

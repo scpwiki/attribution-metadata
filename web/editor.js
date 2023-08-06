@@ -1,7 +1,7 @@
 // Globals
 
 let language;
-let attribData;
+let attributions;
 
 // Error handling
 
@@ -225,7 +225,7 @@ async function getPageAttribution(site, page) {
   return response.json();
 }
 
-async function setPageAttribution(site, page, pasword, attributions) {
+async function setPageAttribution(site, page, pasword) {
   await queryAttrib('PUT', '/attribution/page', { site, page, password, attributions });
 }
 
@@ -310,7 +310,7 @@ async function fetchPageCrom(siteSlug, pageSlug) {
 
 async function fetchPageAttrib(siteSlug, pageSlug) {
   const element = document.getElementById('attrib');
-  const attributions = await getPageAttribution(siteSlug, pageSlug);
+  attributions = await getPageAttribution(siteSlug, pageSlug);
 
   deleteChildren(element);
 
@@ -421,11 +421,11 @@ async function fetchPageAttrib(siteSlug, pageSlug) {
   }
 
   const itemsParent = document.createElement('div');
-  itemsParent.classList = ['attrib-container'];
+  itemsParent.id = 'attrib-container';
 
   // List of attribution entries
   const itemsAttrib = document.createElement('div');
-  itemsAttrib.classList = ['attrib-entries'];
+  itemsAttrib.id = 'attrib-entries';
   for (const attribution of attributions) {
     itemsAttrib.appendChild(buildAttribution(attribution));
   }
@@ -433,8 +433,8 @@ async function fetchPageAttrib(siteSlug, pageSlug) {
 
   // Quick-edit attribution
   const itemsInput = document.createElement('textarea');
-  itemsInput.classList = ['attrib-input'];
-  itemsInput.value = '...'; // TODO
+  itemsInput.id = 'attrib-input';
+  itemsInput.value = generateShorthand();
   itemsParent.appendChild(itemsInput);
   // TODO add handler
 
@@ -514,6 +514,21 @@ async function handleChangePassword(event) {
     element.classList = ['error'];
     element.innerText = getMessage('error-password-set');
   }
+}
+
+// Shorthand system
+
+function parseShorthand() {
+  const value = document.getElementById('attrib-input').value;
+  // TODO
+}
+
+function generateShorthand() {
+  let output = '';
+  for (const attr of attributions) {
+    output += `${attr.type};${attr.user_name || ''};${attr.user_id || ''};${attr.date || ''}\n`;
+  }
+  return output;
 }
 
 // Utilities
