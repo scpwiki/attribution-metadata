@@ -526,7 +526,7 @@ function parseShorthand() {
 function generateShorthand() {
   let output = '';
   for (const attr of attributions) {
-    output += `${attr.type};${attr.user_name || ''};${attr.user_id || ''};${attr.date || ''}\n`;
+    output += `${attr.type},${attr.user_name || ''},${attr.user_id || ''},${attr.date || ''}\n`;
   }
   return output;
 }
