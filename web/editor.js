@@ -48,6 +48,7 @@ const TRANSLATIONS = {
     'page-missing': 'Page not found in Crom',
     'page-fetch': 'Fetch',
     'page-save': 'Save',
+    'page-load-text': 'Load from text',
     'attribution-none': 'No attributions',
     'attribution-author': 'Author',
     'attribution-rewrite': 'Rewrite',
@@ -440,10 +441,20 @@ async function fetchPageAttrib(siteSlug, pageSlug) {
 
   element.appendChild(itemsParent);
 
+  // Buttons
+  const buttons = document.createElement('span');
+  buttons.classList = ['button-row'];
+
   const saveButton = document.createElement('button');
   saveButton.innerText = getMessage('page-save');
+  buttons.appendChild(saveButton);
+
+  const textLoadButton = document.createElement('button');
+  textLoadButton.innerText = getMessage('page-load-text');
+  buttons.appendChild(textLoadButton);
+
   // TODO add handler
-  element.appendChild(saveButton);
+  element.appendChild(buttons);
 }
 
 async function fetchPage(event) {

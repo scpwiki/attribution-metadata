@@ -40,6 +40,10 @@ input:invalid {
   width: 40%;
 }
 
+.button-row button {
+  margin: 0.2em;
+}
+
 .info {
   font-size: 0.8em;
 }
