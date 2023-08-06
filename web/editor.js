@@ -382,8 +382,8 @@ async function fetchPageAttrib(siteSlug, pageSlug) {
       container.appendChild(label);
 
       const input = document.createElement('input');
-      input.type = 'number';
-      input.min = 1;
+      input.type = 'text';
+      input.pattern = '[1-9][0-9]*'; // positive integers
       input.value = attribution.user_id;
       container.appendChild(input);
 
@@ -399,7 +399,8 @@ async function fetchPageAttrib(siteSlug, pageSlug) {
       container.appendChild(label);
 
       const date = document.createElement('input');
-      date.type = 'date';
+      date.type = 'text';
+      date.pattern = '2[0-9]{3}-[0-9]{2}-[0-9]{2}'; // YYYY-MM-DD dates after 1999 only
       date.value = attribution.date;
       container.appendChild(date);
 
