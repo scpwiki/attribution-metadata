@@ -412,7 +412,7 @@ function updatePageAttrib() {
 
       const date = document.createElement('input');
       date.type = 'text';
-      date.pattern = '2[0-9]{3}-[0-9]{2}-[0-9]{2}'; // YYYY-MM-DD dates after 1999 only
+      date.pattern = '20[0-9]{2}-[0-9]{2}-[0-9]{2}'; // YYYY-MM-DD dates between 2000-2099 only. More restrictive than API
       date.value = attribution.date;
       container.appendChild(date);
 
