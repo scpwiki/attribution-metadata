@@ -380,6 +380,7 @@ function updatePageAttrib() {
       input.type = 'text';
       input.placeholder = 'Moto42';
       input.value = attribution.user_name;
+      input.addEventListener('input', debounce(handleUserNameUpdate, 500));
       container.appendChild(input);
 
       return container;
@@ -487,6 +488,7 @@ function updatePageAttrib() {
 }
 
 async function handleUserNameUpdate(event) {
+  console.log(event)
   const { name, id } = await getUserInfo(event.target.value);
   const idElement = event.target.querySelector('.entry-id input');
 
@@ -496,7 +498,7 @@ async function handleUserNameUpdate(event) {
   } else {
     // Update both name and ID
     event.target.value = name;
-    idElement.value = id || '';
+    idElement.value = id;
   }
 }
 
