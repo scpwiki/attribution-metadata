@@ -440,6 +440,20 @@ function updatePageAttrib() {
     return attribElement;
   }
 
+  function buildQuickEdit() {
+    const element = document.createElement('textarea');
+    element.id = 'attrib-input';
+    element.value = generateShorthand();
+    return element;
+  }
+
+  function buildLoadEdit() {
+    const element = document.createElement('button');
+    element.innerText = getMessage('page-load-text');
+    element.addEventListener('click', handleLoadFromShorthand);
+    return element;
+  }
+
   const itemsParent = document.createElement('div');
   itemsParent.id = 'attrib-container';
 
@@ -452,12 +466,7 @@ function updatePageAttrib() {
   itemsParent.appendChild(itemsAttrib);
 
   // Quick-edit attribution
-  const itemsInput = document.createElement('textarea');
-  itemsInput.id = 'attrib-input';
-  itemsInput.value = generateShorthand();
-  itemsParent.appendChild(itemsInput);
-  // TODO add handler
-
+  itemsParent.appendChild(buildQuickEdit());
   element.appendChild(itemsParent);
 
   // Buttons
@@ -467,11 +476,7 @@ function updatePageAttrib() {
   const saveButton = document.createElement('button');
   saveButton.innerText = getMessage('page-save');
   buttons.appendChild(saveButton);
-
-  const textLoadButton = document.createElement('button');
-  textLoadButton.innerText = getMessage('page-load-text');
-  textLoadButton.addEventListener('click', handleLoadFromShorthand);
-  buttons.appendChild(textLoadButton);
+  buttons.appendChild(buildLoadEdit());
 
   // TODO add handler
   element.appendChild(buttons);
