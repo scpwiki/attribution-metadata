@@ -596,7 +596,12 @@ function parseShorthand() {
       }
     }
 
-    attrib.push({ type, name, id, date });
+    attrib.push({
+      type,
+      user_name: name,
+      user_id: id,
+      date,
+    });
   }
 
   // All suceeded, overwrite attribution and reload
