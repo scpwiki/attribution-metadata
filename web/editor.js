@@ -331,16 +331,7 @@ async function fetchPage(event) {
 }
 
 function updatePageAttrib() {
-  const element = document.getElementById('attrib');
-  deleteChildren(element);
-
-  if (attributions === null || attributions.length === 0) {
-    const label = document.createElement('label');
-    label.innerText = getMessage('attribution-none');
-    element.appendChild(label);
-    return;
-  }
-
+  // Helper functions
   function buildAttribution(attribution) {
     function buildAttributionType() {
       const container = document.createElement('div');
@@ -452,6 +443,17 @@ function updatePageAttrib() {
     element.innerText = getMessage('page-load-text');
     element.addEventListener('click', handleLoadFromShorthand);
     return element;
+  }
+
+  // DOM construction
+  const element = document.getElementById('attrib');
+  deleteChildren(element);
+
+  if (attributions === null || attributions.length === 0) {
+    const label = document.createElement('label');
+    label.innerText = getMessage('attribution-none');
+    element.appendChild(label);
+    return;
   }
 
   const itemsParent = document.createElement('div');
