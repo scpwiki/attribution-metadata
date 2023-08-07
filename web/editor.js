@@ -14,7 +14,7 @@ function fatalError(primary, secondary = null) {
 
   if (secondary) {
     const element2 = document.createElement('div');
-    element2.classList = ['error-secondary'];
+    element2.classList = 'error-secondary';
     element2.innerText = secondary;
     element.appendChild(element2);
   }
@@ -274,10 +274,10 @@ async function fetchPageCrom(siteSlug, pageSlug) {
   deleteChildren(element);
 
   if (pageInfo === null) {
-    element.classList = ['error'];
+    element.classList = 'error';
     element.innerText = getMessage('page-missing');
   } else {
-    element.classList = [];
+    element.classList = '';
     const info = document.createElement('span');
     const link = document.createElement('a');
     link.href = pageInfo.url;
@@ -319,7 +319,7 @@ async function fetchPage(event) {
   const pageSlug = document.getElementById('main-page').value;
   if (!siteSlug || !pageSlug) {
     const element = document.getElementById('main-status');
-    element.classList = ['error'];
+    element.classList = 'error';
     element.innerText = getMessage('page-parameters-missing');
     return;
   }
@@ -335,7 +335,8 @@ function updatePageAttrib() {
   function buildAttribution(attribution) {
     function buildAttributionType() {
       const container = document.createElement('div');
-      container.classList = ['row', 'entry-type'];
+      container.classList.add('row');
+      container.classList.add('entry-type');
 
       const label = document.createElement('label');
       label.innerText = getMessage('field-attribution-type');
@@ -370,7 +371,8 @@ function updatePageAttrib() {
 
     function buildUserName() {
       const container = document.createElement('div');
-      container.classList = ['row', 'entry-name'];
+      container.classList.add('row');
+      container.classList.add('entry-name');
 
       const label = document.createElement('label');
       label.innerText = getMessage('field-user-name');
@@ -388,7 +390,8 @@ function updatePageAttrib() {
 
     function buildUserId() {
       const container = document.createElement('div');
-      container.classList = ['row', 'entry-id'];
+      container.classList.add('row');
+      container.classList.add('entry-id');
 
       const label = document.createElement('label');
       label.innerText = getMessage('field-user-id');
@@ -405,7 +408,8 @@ function updatePageAttrib() {
 
     function buildDate() {
       const container = document.createElement('div');
-      container.classList = ['row', 'entry-date'];
+      container.classList.add('row');
+      container.classList.add('entry-date');
 
       const label = document.createElement('label');
       label.innerText = getMessage('field-date');
@@ -421,7 +425,7 @@ function updatePageAttrib() {
     }
 
     const attribElement = document.createElement('fieldset');
-    attribElement.classList = ['attrib-entry'];
+    attribElement.classList.add('attrib-entry');
     attribElement.appendChild(buildAttributionType());
     attribElement.appendChild(buildUserName());
     attribElement.appendChild(buildUserId());
@@ -476,7 +480,7 @@ function updatePageAttrib() {
 
   // Buttons
   const buttons = document.createElement('span');
-  buttons.classList = ['button-row'];
+  buttons.classList.add('button-row');
 
   const saveButton = document.createElement('button');
   saveButton.innerText = getMessage('page-save');
