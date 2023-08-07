@@ -335,7 +335,7 @@ function updatePageAttrib() {
   function buildAttribution(attribution) {
     function buildAttributionType() {
       const container = document.createElement('div');
-      container.classList = ['row'];
+      container.classList = ['row', 'entry-type'];
 
       const label = document.createElement('label');
       label.innerText = getMessage('field-attribution-type');
@@ -370,7 +370,7 @@ function updatePageAttrib() {
 
     function buildUserName() {
       const container = document.createElement('div');
-      container.classList = ['row'];
+      container.classList = ['row', 'entry-name'];
 
       const label = document.createElement('label');
       label.innerText = getMessage('field-user-name');
@@ -387,7 +387,7 @@ function updatePageAttrib() {
 
     function buildUserId() {
       const container = document.createElement('div');
-      container.classList = ['row'];
+      container.classList = ['row', 'entry-id'];
 
       const label = document.createElement('label');
       label.innerText = getMessage('field-user-id');
@@ -404,7 +404,7 @@ function updatePageAttrib() {
 
     function buildDate() {
       const container = document.createElement('div');
-      container.classList = ['row'];
+      container.classList = ['row', 'entry-date'];
 
       const label = document.createElement('label');
       label.innerText = getMessage('field-date');
@@ -484,6 +484,20 @@ function updatePageAttrib() {
 
   // TODO add handler
   element.appendChild(buttons);
+}
+
+async function handleUserNameUpdate(event) {
+  const { name, id } = await getUserInfo(event.target.value);
+  const idElement = event.target.querySelector('.entry-id input');
+
+  if (name === null) {
+    // No match in Crom, assume custom
+    idElement.value = '';
+  } else {
+    // Update both name and ID
+    event.target.value = name;
+    idElement.value = id || '';
+  }
 }
 
 function handleLoadFromShorthand(event) {
