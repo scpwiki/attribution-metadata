@@ -310,9 +310,28 @@ async function fetchPageCrom(siteSlug, pageSlug) {
 }
 
 async function fetchPageAttrib(siteSlug, pageSlug) {
-  const element = document.getElementById('attrib');
   attributions = await getPageAttribution(siteSlug, pageSlug);
+  updatePageAttrib();
+}
 
+async function fetchPage(event) {
+  const siteSlug = document.getElementById('main-site').value;
+  const pageSlug = document.getElementById('main-page').value;
+  if (!siteSlug || !pageSlug) {
+    const element = document.getElementById('main-status');
+    element.classList = ['error'];
+    element.innerText = getMessage('page-parameters-missing');
+    return;
+  }
+
+  await Promise.all([
+    fetchPageCrom(siteSlug, pageSlug),
+    fetchPageAttrib(siteSlug, pageSlug),
+  ]);
+}
+
+function updatePageAttrib() {
+  const element = document.getElementById('attrib');
   deleteChildren(element);
 
   if (attributions === null || attributions.length === 0) {
@@ -455,22 +474,6 @@ async function fetchPageAttrib(siteSlug, pageSlug) {
 
   // TODO add handler
   element.appendChild(buttons);
-}
-
-async function fetchPage(event) {
-  const siteSlug = document.getElementById('main-site').value;
-  const pageSlug = document.getElementById('main-page').value;
-  if (!siteSlug || !pageSlug) {
-    const element = document.getElementById('main-status');
-    element.classList = ['error'];
-    element.innerText = getMessage('page-parameters-missing');
-    return;
-  }
-
-  await Promise.all([
-    fetchPageCrom(siteSlug, pageSlug),
-    fetchPageAttrib(siteSlug, pageSlug),
-  ]);
 }
 
 async function handleChangePassword(event) {
