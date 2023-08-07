@@ -492,9 +492,8 @@ function updatePageAttrib() {
 }
 
 async function handleUserNameUpdate(event) {
-  console.log(event)
   const { name, id } = await getUserInfo(event.target.value);
-  const idElement = event.target.querySelector('.entry-id input');
+  const idElement = event.target.parentNode.querySelector('.entry-id input');
 
   if (name === null) {
     // No match in Crom, assume custom
