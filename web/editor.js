@@ -539,7 +539,7 @@ async function handleChangePassword(event) {
 
 function parseShorthand() {
   const lines = document.getElementById('attrib-input').value.split('\n');
-  const attrb = [];
+  const attrib = [];
   for (const line of lines) {
     if (!line.trim()) {
       // Skip empty lines
@@ -549,7 +549,7 @@ function parseShorthand() {
     // Format:
     // AttribType,UserName,UserId,Date
     // e.g. r,thedeadlymoose,,2011-04-09 becomes rewrite / thedeadlymoose / null / 2011-04-09
-    const [type, name, id, date] = line.split(',');
+    let [type, name, id, date] = line.split(',');
 
     try {
       type = getAttributionType(type);
