@@ -449,23 +449,25 @@ function updatePageAttrib() {
   const element = document.getElementById('attrib');
   deleteChildren(element);
 
-  if (attributions === null || attributions.length === 0) {
-    const label = document.createElement('label');
-    label.innerText = getMessage('attribution-none');
-    element.appendChild(label);
-    return;
-  }
-
   const itemsParent = document.createElement('div');
   itemsParent.id = 'attrib-container';
 
   // List of attribution entries
-  const itemsAttrib = document.createElement('div');
-  itemsAttrib.id = 'attrib-entries';
-  for (const attribution of attributions) {
-    itemsAttrib.appendChild(buildAttribution(attribution));
+
+  if (attributions === null || attributions.length === 0) {
+    const label = document.createElement('label');
+    label.innerText = getMessage('attribution-none');
+    itemsParent.appendChild(label);
+  } else {
+    const itemsAttrib = document.createElement('div');
+    itemsAttrib.id = 'attrib-entries';
+
+    for (const attribution of attributions) {
+      itemsAttrib.appendChild(buildAttribution(attribution));
+    }
+
+    itemsParent.appendChild(itemsAttrib);
   }
-  itemsParent.appendChild(itemsAttrib);
 
   // Quick-edit attribution
   itemsParent.appendChild(buildQuickEdit());
