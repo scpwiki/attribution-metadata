@@ -470,10 +470,15 @@ function updatePageAttrib() {
 
   const textLoadButton = document.createElement('button');
   textLoadButton.innerText = getMessage('page-load-text');
+  textLoadButton.addEventListener('click', handleLoadFromShorthand);
   buttons.appendChild(textLoadButton);
 
   // TODO add handler
   element.appendChild(buttons);
+}
+
+function handleLoadFromShorthand(event) {
+  parseShorthand();
 }
 
 async function handleChangePassword(event) {
