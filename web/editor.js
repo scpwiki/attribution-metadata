@@ -533,8 +533,61 @@ async function handleChangePassword(event) {
 // Shorthand system
 
 function parseShorthand() {
-  const value = document.getElementById('attrib-input').value;
-  // TODO
+  const lines = document.getElementById('attrib-input').value.split('\n');
+  const attrb = [];
+  for (const line of lines) {
+    if (!line.trim()) {
+      // Skip empty lines
+      continue;
+    }
+
+    // Format:
+    // AttribType,UserName,UserId,Date
+    // e.g. r,thedeadlymoose,,2011-04-09 becomes rewrite / thedeadlymoose / null / 2011-04-09
+    const [type, name, id, date] = line.split(',');
+
+    try {
+      type = getAttributionType(type);
+    } catch (error) {
+      // TODO report invalid attribution type
+      return;
+    }
+
+    if (!name) {
+      // TODO report name not specified
+      return;
+    }
+
+    // Default to null if not specified
+    id = id || null;
+    date = date || null;
+
+    // Sanity checks for inputs
+    if (id) {
+      try {
+        if (parseIntThrow(id) <= 0) {
+          throw new Error(`User ID specified is not positive: ${id}`);
+        }
+      } catch (err) {
+        // TODO report error for id
+        return;
+      }
+    }
+
+    if (date) {
+      // More permissive check to match what the backend looks for
+      if (!/[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(date)) {
+        // TODO report error date
+        return;
+      }
+    }
+
+    attrib.push({ type, name, id, date });
+  }
+
+  // All suceeded, overwrite attribution and reload
+  attributions = attrib;
+  updatePageAttrib();
 }
 
 function generateShorthand() {
@@ -563,7 +616,18 @@ function getAttributionType(value) {
     }
   }
 
-  fatalError(`Invalid attribution type: ${value}`);
+  throw new Error(`Invalid attribution type: ${value}`);
+}
+
+// A version of parseInt() which throws on error.
+function parseIntThrow(value) {
+  const result = parseInt(value);
+  if (result != result) {
+    // NaN -> invalid value
+    throw new Error(`Invalid integer value: ${value}`);
+  }
+
+  return result;
 }
 
 function getSiteSlug(site) {
