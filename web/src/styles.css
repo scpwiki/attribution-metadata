@@ -1,0 +1,255 @@
+:root {
+  --color-blush-50: #f9f3f4;
+  --color-blush-100: #f5e5e8;
+  --color-blush-200: #ebcbd1;
+  --color-blush-300: #e2b1ba;
+  --color-blush-400: #d897a3;
+  --color-blush-500: #ce7e8c;
+  --color-blush-600: #be5568;
+  --color-blush-700: #9f3c4e;
+  --color-blush-800: #762d3a;
+  --color-blush-900: #4e1d26;
+}
+
+/** Global semantic styles */
+
+html {
+  font-family: "Inter Variable", sans-serif;
+  line-height: 1.5;
+}
+
+body {
+  background-color: var(--color-blush-50);
+  color: var(--color-blush-800);
+}
+
+#root {
+  box-sizing: border-box;
+  min-height: 100vh;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--color-blush-700);
+  margin: 16px 0 8px;
+}
+
+input,
+select {
+  box-sizing: border-box;
+  background-color: var(--color-blush-50);
+  color: inherit;
+  height: 32px;
+  max-width: 100%;
+  padding: 4px 8px;
+  border: 1px solid var(--color-blush-800);
+  border-radius: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+button {
+  box-sizing: border-box;
+  padding: 4px 16px;
+  border: none;
+  height: 32px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: var(--color-blush-800);
+  border-radius: 4px;
+
+  transition: background-color 0.2s cubic-bezier(0.06, 0.975, 0.195, 0.985);
+}
+
+button:hover {
+  background-color: var(--color-blush-600);
+}
+
+/** Shared utility classes */
+
+.container {
+  border-radius: 8px;
+  background-color: var(--color-blush-100);
+  margin-bottom: 16px;
+  padding: 16px 16px;
+}
+
+.container--error {
+  margin-top: 16px;
+  background-color: var(--color-blush-200);
+}
+
+.container__title {
+  margin: 0;
+  margin-bottom: 8px;
+  font-size: 1.2rem;
+}
+
+.container p {
+  margin: 0;
+}
+
+/** Individual components */
+
+.top-navigation {
+  display: flex;
+  margin: 16px 0;
+  gap: 32px;
+}
+
+.top-navigation__link {
+  display: inline-block;
+  box-sizing: border-box;
+  padding: 4px 0;
+  height: 32px;
+  cursor: pointer;
+  color: var(--color-blush-800);
+  background-color: transparent;
+  border-radius: 8px;
+}
+
+.top-navigation__link--active {
+  font-weight: bold;
+}
+
+.title {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.get-page-form {
+  margin-bottom: 16px;
+}
+
+.page-info__link {
+  font-weight: bold;
+  color: inherit;
+  transition: color 0.2s cubic-bezier(0.06, 0.975, 0.195, 0.985);
+}
+
+.page-info__link:hover {
+  color: var(--color-blush-600);
+}
+
+.password-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.password-form__label-text {
+  margin-bottom: 8px;
+}
+
+.password-form__group {
+  display: flex;
+  gap: 16px;
+}
+
+@keyframes animate-entry {
+  0% {
+    opacity: 0.2;
+    translate: 0 -16px;
+  }
+  100% {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+.attributions-input-table {
+  width: 100%;
+  text-align: left;
+  border-spacing: 4px 8px;
+  border-collapse: separate;
+}
+
+.attributions-input-table th {
+  font-weight: 400;
+  line-height: 1;
+}
+
+.attributions-input-table tr {
+  vertical-align: top;
+
+  animation-duration: 0.2s;
+  animation-timing-function: cubic-bezier(0.06, 0.975, 0.195, 0.985);
+  animation-name: animate-entry;
+  animation-fill-mode: backwards;
+}
+
+.attributions-input-table td:last-of-type {
+  width: 1px;
+  white-space: nowrap;
+}
+
+.attributions-input-table__wrapper {
+  overflow-x: auto;
+  margin: 0 -5px;
+}
+
+.attributions-input-table input,
+.attributions-input-table select {
+  width: 100%;
+  min-width: 120px;
+}
+
+.attributions-input-table input:read-only {
+  border-color: transparent;
+  background-color: var(--color-blush-50);
+}
+
+.wikidot-id-input {
+  position: relative;
+}
+
+.wikidot-id-input__spinner {
+  pointer-events: none;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid var(--color-blush-800);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
+
+  position: absolute;
+  right: 6px;
+  top: 0;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.add-button {
+  display: block;
+  width: 100%;
+  background: transparent;
+  color: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 8px;
+  border: 1px dashed var(--color-blush-700);
+  border-radius: 4px;
+  text-align: center;
+}
+
+.add-button:hover {
+  background-color: var(--color-blush-200);
+}
+
+.submit-attributions-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.submit-attributions-row__password {
+  flex: 1;
+}

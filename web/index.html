@@ -1,106 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
   <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="description" content="SCP Wiki Attribution Metadata Editor">
     <meta name="keywords" content="scp,wiki,attribution,metadata,editor">
-    <link rel="stylesheet" href="./editor.css">
-    <script src="./editor.js"></script>
-    <title>Attribution Metadata Editor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Attribution Metadata</title>
   </head>
-
   <body>
     <noscript>This application requires Javascript to function.</noscript>
-
-    <h1 id="error" class="error hidden"></h1>
-
-    <div id="form">
-      <fieldset id="auth">
-        <legend id="auth-label"></legend>
-
-        <!-- Password -->
-        <div class="row">
-          <label id="auth-password-label"></label>
-          <input id="auth-password" type="password"></input>
-          <label id="auth-password-error" class="error"></label>
-        </div>
-      </fieldset>
-
-      <fieldset id="main">
-        <legend id="main-label"></legend>
-
-        <!-- Site -->
-        <div class="row">
-          <label id="main-site-label"></label>
-          <input id="main-site" type="text"></input>
-          <label id="main-site-error" class="error"></label>
-        </div>
-
-        <!-- Page -->
-        <div class="row">
-          <label id="main-page-label"></label>
-          <input id="main-page" type="text"></input>
-        </div>
-
-        <button id="main-fetch" class="margin-top"></button>
-        <div id="main-status"></div>
-
-        <!-- Attribution -->
-        <div id="attrib"></div>
-      </fieldset>
-
-      <fieldset id="admin">
-        <legend id="admin-label"></legend>
-
-        <!-- Reset Password -->
-        <span>
-          <label id="admin-password-label"></label>
-          <input id="admin-password" type="password"></input>
-          <label id="admin-password-error" class="error"></label>
-        </span>
-
-        <div>
-          <span>
-            <input id="admin-radio-regular" type="radio" name="password-type" value="regular" checked>
-            <label id="admin-radio-regular-label" for="password-type"></label>
-          </span>
-
-          <span>
-            <input id="admin-radio-admin" type="radio" name="password-type" value="admin">
-            <label id="admin-radio-admin-label" for="password-type"></label>
-          </span>
-        </div>
-
-        <div class="margin-top">
-          <!-- Old password -->
-          <div class="row">
-            <label id="admin-old-password-label"></label>
-            <input id="admin-old-password" type="password"></input>
-          </div>
-
-          <!-- New password -->
-          <div class="row">
-            <label id="admin-new-password-label"></label>
-            <input id="admin-new-password" type="password"></input>
-          </div>
-
-          <!-- Confirm password -->
-          <div class="row">
-            <label id="admin-confirm-password-label"></label>
-            <input id="admin-confirm-password" type="password"></input>
-          </div>
-        </div>
-
-        <span>
-          <button id="admin-change-password" class="margin-top"></button>
-          <label id="admin-change-password-label"></label>
-        </span>
-      </fieldset>
-
-      <span class="info">
-        [<a id="info-viewer" target="_blank"></a>]
-        [<a id="info-source" href="https://github.com/scpwiki/attribution-metadata" target="_blank"></a>]
-      </span>
-    </div>
+    <div id="root"></div>
+    <script type="module" src="src/index.tsx"></script>
   </body>
 </html>
