@@ -27,11 +27,11 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            ./target
+            ./api/target
           key: ${{ runner.os }}-rust-${{ hashFiles('Cargo.toml') }}
 
       - name: Build
-        run: cargo build
+        run: cd api && cargo build
 
   clippy_lint:
     name: Lint
@@ -56,11 +56,11 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            ./target
+            ./api/target
           key: ${{ runner.os }}-rust-lint-${{ hashFiles('Cargo.toml') }}
 
       - name: Rustfmt
-        run: cargo fmt --all -- --check
+        run: cd api && cargo fmt --all -- --check
 
       - name: Clippy
-        run: cargo clippy
+        run: cd api && cargo clippy
