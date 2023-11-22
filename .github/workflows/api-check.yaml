@@ -3,11 +3,8 @@ name: 'Rust Build'
 on:
   push:
     paths:
-      - '.github/workflows/check.yaml'
-      - 'Cargo.toml'
-      - 'Cargo.lock'
-      - 'src/**'
-      - 'build.rs'
+      - '.github/workflows/api-check.yaml'
+      - 'api/**'
 
 jobs:
   build:
