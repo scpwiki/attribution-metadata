@@ -1,0 +1,28 @@
+{
+  "include": ["src"],
+  "compilerOptions": {
+    // Targets
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "types": ["vite/client"],
+
+    // Generation
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
+    "isolatedModules": true,
+    "noEmit": true,
+
+    // Typechecking
+    "strict": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "useDefineForClassFields": true,
+    "noUnusedLocals": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
+    "forceConsistentCasingInFileNames": true,
+    "noPropertyAccessFromIndexSignature": true,
+  }
+}
