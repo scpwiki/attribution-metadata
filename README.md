@@ -6,6 +6,8 @@ Because Wikidot does not recognize authorship beyond page creation, this has bee
 
 This is that service. It stores all the attribution data in AWS DynamoDB, and handles requests without a permanent server using AWS Lambda.
 
+There is a corresponding web frontend, located in `web/`, which provides a convenient way of interacting with this service. However, any REST client can communicate with this service, for instance as part of automated checks or updates.
+
 ### Deployment
 
 Locally, you can verify that your code builds in the usual way:
