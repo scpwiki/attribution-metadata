@@ -3,11 +3,8 @@ name: 'Rust Build'
 on:
   push:
     paths:
-      - '.github/workflows/check.yaml'
-      - 'Cargo.toml'
-      - 'Cargo.lock'
-      - 'src/**'
-      - 'build.rs'
+      - '.github/workflows/api-check.yaml'
+      - 'api/**'
 
 jobs:
   build:
@@ -30,11 +27,11 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            ./target
-          key: ${{ runner.os }}-rust-${{ hashFiles('Cargo.toml') }}
+            ./api/target
+          key: ${{ runner.os }}-rust-${{ hashFiles('api/Cargo.toml') }}
 
       - name: Build
-        run: cargo build
+        run: cd api && cargo build
 
   clippy_lint:
     name: Lint
@@ -59,11 +56,11 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            ./target
-          key: ${{ runner.os }}-rust-lint-${{ hashFiles('Cargo.toml') }}
+            ./api/target
+          key: ${{ runner.os }}-rust-lint-${{ hashFiles('api/Cargo.toml') }}
 
       - name: Rustfmt
-        run: cargo fmt --all -- --check
+        run: cd api && cargo fmt --all -- --check
 
       - name: Clippy
-        run: cargo clippy
+        run: cd api && cargo clippy
