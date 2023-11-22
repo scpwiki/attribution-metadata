@@ -1,6 +1,10 @@
-## attribution-metadata web
+## attribution-metadata Web
 
 This is a web UI for interfacing with the `attribution-metadata` Lambda service. It enables users to interact with the API in a user-friendly way, via their browser.
+
+### Internationalization
+
+This application supports translating into other languages. Simply add a corresponding list of translation strings within the `TRANSLATIONS` block in `src/util/i18n.ts`, connected with the language code. Then, on load, specifying the language code results in that language being loaded in the UI.
 
 ### Deployment
 
@@ -20,10 +24,6 @@ npm run build
 ```
 
 You can also use `bun` for these steps instead of `npm`.
-
-### License
-
-Available under the terms of the MIT License.
 
 ### Special Thanks
 
